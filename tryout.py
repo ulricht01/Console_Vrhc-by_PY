@@ -103,9 +103,10 @@ class DvojKostka:
 
 class Bar:
     def __init__(self, zetony_bila = [], zetony_cerna = []):
+        self.zetony_bila = []
+        self.zetony_cerna = []
         self.pocet_zetonu_bila = len(zetony_bila)
         self.pocet_zetonu_cerna = len(zetony_cerna)
-        kamen = None
     
     def vytvor_kamen_bily(self, barva = "Bílý"):
         kamen = HerniKamen(barva)
@@ -129,9 +130,17 @@ class Bar:
 
     def vyhod_z_baru(self):
         pass
+        
 
-    def pridej_do_baru(self):
-        pass
+    def pridej_do_baru(self, start = None):
+        temp = []
+        pole_start = hra.herni_pole[start - 1]
+        temp.append(pole_start.zasobnik[0])
+        if temp[0].barva == "Bílý":
+            self.pocet_zetonu_bila.append(temp)
+        elif temp[0].barva == "Černý":
+            self.pocet_zetonu_cerna.append(temp)
+
     
 
 class HerniKamen:
@@ -142,6 +151,12 @@ class Hrac:
     def __init__(self, jmeno, barva):
         self.jmeno = jmeno
         self.barva = barva 
+    
+    def prerus_tah(self):
+        if hra.token == 0:
+            hra.token = 1
+        else:
+            hra.token = 0
 
 class KonzolovyHrac(Hrac):
     def tah(self, temp= []):
@@ -196,17 +211,12 @@ class KonzolovyHrac(Hrac):
         elif hra.presuny == 2:
             print("Už jsi táhl za obě kostky!")
 
-    def prerus_tah(self):
-        if hra.token == 0:
-            hra.token = 1
-        else:
-            hra.token = 0
-
     def nabidka(self):
         print("1) Hod kostkami!")
         print("2) Pohni s kameny!")
         print("3) Zobraz plochu!")
         print("4) Ukonči tah!")
+        print("5) Vyjed z baru!")
         akce = int(input("Zadej akci: "))
         if akce == 1 and hra.hozeno == 0:
             if hra.token == 0:
@@ -233,6 +243,8 @@ class KonzolovyHrac(Hrac):
                 hra.Hrac2.prerus_tah()
                 hra.hozeno = 0
                 hra.presuny = 0
+        elif akce == 5:
+            hra.barec.vyhod_z_baru()
         elif hra.hozeno == 1:
             print("Už jsi házel!")
         else:
@@ -252,6 +264,4 @@ while True:
         hra.Hrac1.nabidka()
     elif hra.token == 1:
         hra.Hrac2.prerus_tah()
-
-
-    input("")
+    input("-----------------------------------------------------STISKNI ENTER---------------------------------------------------------------")
