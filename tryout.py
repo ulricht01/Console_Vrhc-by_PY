@@ -5,7 +5,8 @@ rand = random.randint
 class HerniDeska:
     def __init__(self):
 
-        barevny_seznam = ["Černá", "Bílá"]
+        self.token = rand(0,1)
+        barevny_seznam = ["Černý", "Bílý"]
         random.shuffle(barevny_seznam)
 
         volba = input("Budeš hrát s hráčem (1), nebo s AI (0)?")
@@ -35,7 +36,7 @@ class HerniDeska:
         else:
             pocet_zetonu_hrac1 = self.barec.pocet_zetonu_cerna
             pocet_zetonu_hrac2 = self.barec.pocet_zetonu_bila
-        for i in range(1,24):
+        for i in range(0,24):
             self.herni_pole[i].barva_pole()
 
         plocha = f"""
@@ -80,7 +81,7 @@ class HerniPole:
         elif self.zasobnik[0].barva == "Černý":
             self.barva = "Č"
 
-    def presun(self, temp = []):
+    """def presun(self, temp = []):
         start = int(input("Zadej odkud vybíráš"))
         cil = int(input("Zadej kam dáš."))
         if len(hra.herni_pole[start].zasobnik) > 0:
@@ -88,7 +89,7 @@ class HerniPole:
             hra.herni_pole[start].zasobnik.remove(hra.herni_pole[start].zasobnik[0])
             hra.herni_pole[cil].zasobnik.append(temp[0])
         else:
-            print("Prázdný zásobník!")
+            print("Prázdný zásobník!")"""
         
 
     def barva_pole(self):
@@ -153,7 +154,32 @@ class Hrac:
         self.barva = barva 
 
 class KonzolovyHrac(Hrac):
-    pass
+    def tah(self, temp= []):
+        start = int(input("Zadej číslo pole, odkud vybíráš: "))
+        cil = int(input("Zadej číslo pole, kam chceš dát zetony: "))
+
+        if start < 1 or start > 24 or cil < 1 or cil > 24:
+            print("Neplatné číslo pole!")
+            return
+
+        pole_start = hra.herni_pole[start - 1]
+        pole_cil = hra.herni_pole[cil - 1]
+
+        if len(pole_start.zasobnik) > 0:
+            temp.append(pole_start.zasobnik[0])
+
+            if pole_start.zasobnik[0].barva != self.barva:
+                print("Na zadaném poli nemáte zetony vaší barvy!")
+            elif pole_cil.barva != pole_start.barva and pole_cil.barva != self.barva and pole_cil.barva != "N":
+                print("Na poli nejsou tvé žetony!")
+            else:
+                pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                pole_cil.zasobnik.append(temp[0])
+        else:
+            print("Pole ze kterého se snažíte brát, je prázdné!")
+        
+
+
 
 class AiHrac(Hrac):
     pass
@@ -162,4 +188,12 @@ hra = HerniDeska()
 hra.priprav_hru()
 while True:
     hra.vytvor_hraci_plochu()
+    if hra.token == 0:
+        print(hra.Hrac1.barva)
+        hra.Hrac1.tah()
+        hra.token + 1
+    elif hra.token == 1:
+        hra.token - 1
+
+
     input("")
