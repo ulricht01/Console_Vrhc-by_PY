@@ -1,5 +1,4 @@
 import random, sys, os
-
 rand = random.randint
 
 class HerniDeska:
@@ -23,6 +22,7 @@ class HerniDeska:
 
         self.kostka = DvojKostka()
         self.barec = Bar()
+        self.hozeno = 0
 
         self.herni_pole = []
         for cislo in range(1, 25):
@@ -145,7 +145,16 @@ class Hrac:
 class KonzolovyHrac(Hrac):
     def tah(self, temp= []):
         start = int(input("Zadej číslo pole, odkud vybíráš: "))
-        cil = int(input("Zadej číslo pole, kam chceš dát zetony: "))
+        print("1) O počet na 1. kostce")
+        print("2) O počet na 2. kostce")
+        print("3) O počet na obou kostkách")
+        inp = int(input("Zadej: "))
+        if inp == 1:
+            cil = hra.kostka.kostka_1
+        elif inp == 2:
+            cil = hra.kostka.kostka_2
+        elif inp == 3:
+            cil = hra.kostka.kostka_1 + hra.kostka.kostka_2 #int(input("Zadej číslo pole, kam chceš dát zetony: "))
 
         if start < 1 or start > 24 or cil < 1 or cil > 24:
             print("Neplatné číslo pole!")
@@ -177,23 +186,36 @@ class KonzolovyHrac(Hrac):
             hra.token = 0
 
     def nabidka(self):
-        print("1) Pohni s kameny!")
-        print("2) Zobraz plochu!")
-        print("3) Ukonči tah!")
+        print("1) Hod kostkami!")
+        print("2) Pohni s kameny!")
+        print("3) Zobraz plochu!")
+        print("4) Ukonči tah!")
         akce = int(input("Zadej akci: "))
-
-        if akce == 1:
+        if akce == 1 and hra.hozeno == 0:
+            if hra.token == 0:
+                hra.kostka.hod_kostkami()
+                hra.vytvor_hraci_plochu()
+                hra.hozeno = 1
+            else:
+                hra.kostka.hod_kostkami()
+                hra.vytvor_hraci_plochu()
+                hra.hozeno = 1
+        elif akce == 2:
             if hra.token == 0:
                 hra.Hrac1.tah()
             else:
                 hra.Hrac2.tah()
-        elif akce == 2:
-            hra.vytvor_hraci_plochu()
         elif akce == 3:
+            hra.vytvor_hraci_plochu()
+        elif akce == 4:
             if hra.token == 0:
                 hra.Hrac1.prerus_tah()
+                hra.hozeno = 0
             else:
                 hra.Hrac2.prerus_tah()
+                hra.hozeno = 0
+        elif hra.hozeno == 1:
+            print("Už jsi házel!")
         else:
             print("Neplatná akce!")
             
@@ -203,7 +225,6 @@ class KonzolovyHrac(Hrac):
 
 class AiHrac(Hrac):
     pass
-
 hra = HerniDeska()
 hra.priprav_hru()
 while True:
