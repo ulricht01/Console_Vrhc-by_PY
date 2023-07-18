@@ -80,18 +80,7 @@ class HerniPole:
             self.barva = "B"
         elif self.zasobnik[0].barva == "Černý":
             self.barva = "Č"
-
-    """def presun(self, temp = []):
-        start = int(input("Zadej odkud vybíráš"))
-        cil = int(input("Zadej kam dáš."))
-        if len(hra.herni_pole[start].zasobnik) > 0:
-            temp.append(hra.herni_pole[start].zasobnik[0])
-            hra.herni_pole[start].zasobnik.remove(hra.herni_pole[start].zasobnik[0])
-            hra.herni_pole[cil].zasobnik.append(temp[0])
-        else:
-            print("Prázdný zásobník!")"""
         
-
     def barva_pole(self):
         if len(self.zasobnik) == 0:
             self.barva = "N"
@@ -164,19 +153,50 @@ class KonzolovyHrac(Hrac):
 
         pole_start = hra.herni_pole[start - 1]
         pole_cil = hra.herni_pole[cil - 1]
-
-        if len(pole_start.zasobnik) > 0:
-            temp.append(pole_start.zasobnik[0])
-
-            if pole_start.zasobnik[0].barva != self.barva:
-                print("Na zadaném poli nemáte zetony vaší barvy!")
-            elif pole_cil.barva != pole_start.barva and pole_cil.barva != self.barva and pole_cil.barva != "N":
-                print("Na poli nejsou tvé žetony!")
-            else:
-                pole_start.zasobnik.remove(pole_start.zasobnik[0])
-                pole_cil.zasobnik.append(temp[0])
+        if len(pole_cil.zasobnik) == 5:
+            print("Tento zásobník je již plný!")
         else:
-            print("Pole ze kterého se snažíte brát, je prázdné!")
+            if len(pole_start.zasobnik) > 0:
+                temp =[]
+                temp.append(pole_start.zasobnik[0])
+
+                if pole_start.zasobnik[0].barva != self.barva:
+                    print("Na zadaném poli nemáte zetony vaší barvy!")
+                elif pole_cil.barva != pole_start.barva and pole_cil.barva != "N":
+                    print("Na poli nejsou tvé žetony!")
+                else:
+                    pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                    pole_cil.zasobnik.append(temp[0])
+            else:
+                print("Pole ze kterého se snažíte brát, je prázdné!")
+
+    def prerus_tah(self):
+        if hra.token == 0:
+            hra.token = 1
+        else:
+            hra.token = 0
+
+    def nabidka(self):
+        print("1) Pohni s kameny!")
+        print("2) Zobraz plochu!")
+        print("3) Ukonči tah!")
+        akce = int(input("Zadej akci: "))
+
+        if akce == 1:
+            if hra.token == 0:
+                hra.Hrac1.tah()
+            else:
+                hra.Hrac2.tah()
+        elif akce == 2:
+            hra.vytvor_hraci_plochu()
+        elif akce == 3:
+            if hra.token == 0:
+                hra.Hrac1.prerus_tah()
+            else:
+                hra.Hrac2.prerus_tah()
+        else:
+            print("Neplatná akce!")
+            
         
 
 
@@ -189,11 +209,9 @@ hra.priprav_hru()
 while True:
     hra.vytvor_hraci_plochu()
     if hra.token == 0:
-        print(hra.Hrac1.barva)
-        hra.Hrac1.tah()
-        hra.token + 1
+        hra.Hrac1.nabidka()
     elif hra.token == 1:
-        hra.token - 1
+        hra.Hrac2.prerus_tah()
 
 
     input("")
