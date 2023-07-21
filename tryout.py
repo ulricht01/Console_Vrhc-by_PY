@@ -1,9 +1,15 @@
-import random, sys, os
+import random, sys, os, json
 rand = random.randint
 
 class HerniDeska:
     def __init__(self):
-
+        self.file_path = './file.json'
+        check_file = os.path.isfile(self.file_path)
+        """if(check_file):
+            print('FILE EXIST!')
+        else:
+            print('FILE NOT EXIST!')"""
+        
         self.token = rand(0,1)
         barevny_seznam = ["Černý", "Bílý"]
         random.shuffle(barevny_seznam)
@@ -70,6 +76,45 @@ class HerniDeska:
         for i in range(1,3):
             hra.barec.vytvor_start_bily(0)
             hra.barec.vytvor_start_cerny(23)
+
+    def Ulozit(self) -> None:
+        data = {
+            'Bily': self.bar.pocet_zetonu_bila_cil,
+            'Cerny': self.bar.pocet_zetonu_cerna_cil,
+            'Player1': {
+                'Jmeno': self.Hrac1.jmeno,
+                'Barva': self.Hrac1.barva,
+                'Score': self.bar.pocet_zetonu_bila_cil,
+            },
+            'Player2': {
+                'Jmeno': self.Hrac2.jmeno,
+                'Barva': self.Hrac2.barva,
+                'Score': self.bar.pocet_zetonu_cerna_cil,
+            }
+        }
+        with open(self.file_path, 'w') as file:
+            json.dump(data, file)
+        print("Hra byla uložena.")
+
+    def Nahrat(self) -> None:
+        data = {
+            'Bily': self.bar.pocet_zetonu_bila_cil,
+            'Cerny': self.bar.pocet_zetonu_cerna_cil,
+            'Player1': {
+                'Jmeno': self.Hrac1.jmeno,
+                'Barva': self.Hrac1.barva,
+                'Score': self.bar.pocet_zetonu_bila_cil,
+            },
+            'Player2': {
+                'Jmeno': self.Hrac2.jmeno,
+                'Barva': self.Hrac2.barva,
+                'Score': self.bar.pocet_zetonu_cerna_cil,
+            }
+        }
+        with open(self.file_path, 'r') as file:
+            json.load(file)
+        print("Hra byla nahrána.")
+
 
 class HerniPole:
     def __init__(self, cislo_pole, zasobnik = None):
@@ -217,6 +262,8 @@ class KonzolovyHrac(Hrac):
         print("3) Zobraz plochu!")
         print("4) Ukonči tah!")
         print("5) Vyjed z baru!")
+        print("6) Uložit hru")
+        print("7) Nahrát hru")
         akce = int(input("Zadej akci: "))
         if akce == 1 and hra.hozeno == 0:
             if hra.token == 0:
@@ -245,15 +292,17 @@ class KonzolovyHrac(Hrac):
                 hra.presuny = 0
         elif akce == 5:
             hra.barec.vyhod_z_baru()
+        elif akce == 6:
+            hra.Ulozit
+        elif akce == 7:
+            hra.Nahrat
+
         elif hra.hozeno == 1:
             print("Už jsi házel!")
         else:
             print("Neplatná akce!")
+   
             
-        
-
-
-
 class AiHrac(Hrac):
     pass
 hra = HerniDeska()
