@@ -26,6 +26,10 @@ class HerniDeska:
             hrac2 = input("Jméno Ai 1: ")
             self.Hrac2 = AiHrac(hrac2, barevny_seznam[1])           # Základní nabídka pro tvorbu hry s hráčem/AI hráčem
 
+        print(hrac1, ' je ', self.Hrac1.barva)                      # Vypsání barev hráčů
+        print(hrac2, ' je ', self.Hrac2.barva)
+
+
         self.kostka = DvojKostka()
         self.barec = Bar()
         self.hozeno = 0                                             # Určuje jestli v kole již hráč hodil nebo ne, v případě, že hodil, nastaví se 1
@@ -77,38 +81,38 @@ class HerniDeska:
             hra.barec.vytvor_start_bily(0)
             hra.barec.vytvor_start_cerny(23)
 
-    def Ulozit(self) -> None:
+    def Ulozit(self):
         data = {
-            'Bily': self.bar.pocet_zetonu_bila_cil,
-            'Cerny': self.bar.pocet_zetonu_cerna_cil,
+            #'Bily': '',        ???
+            #'Cerny': '',       ???
             'Player1': {
                 'Jmeno': self.Hrac1.jmeno,
                 'Barva': self.Hrac1.barva,
-                'Score': self.bar.pocet_zetonu_bila_cil,
+                'Score': self.barec.pocet_zetonu_bila,
             },
             'Player2': {
                 'Jmeno': self.Hrac2.jmeno,
                 'Barva': self.Hrac2.barva,
-                'Score': self.bar.pocet_zetonu_cerna_cil,
+                'Score': self.barec.pocet_zetonu_cerna,
             }
         }
         with open(self.file_path, 'w') as file:
             json.dump(data, file)
         print("Hra byla uložena.")
 
-    def Nahrat(self) -> None:
+    def Nahrat(self):
         data = {
-            'Bily': self.bar.pocet_zetonu_bila_cil,
-            'Cerny': self.bar.pocet_zetonu_cerna_cil,
+            #'Bily': '',        ???
+            #'Cerny': '',       ???
             'Player1': {
                 'Jmeno': self.Hrac1.jmeno,
                 'Barva': self.Hrac1.barva,
-                'Score': self.bar.pocet_zetonu_bila_cil,
+                'Score': '',
             },
             'Player2': {
                 'Jmeno': self.Hrac2.jmeno,
                 'Barva': self.Hrac2.barva,
-                'Score': self.bar.pocet_zetonu_cerna_cil,
+                'Score': '',
             }
         }
         with open(self.file_path, 'r') as file:
@@ -181,10 +185,10 @@ class Bar:                                                          # Třída ba
             hra.barec.vytvor_kamen_bily(x)
         elif hra.Hrac1.barva == "Bílý" and len(self.zetony_bila) == 0:
             print("Na baru nemáš žádné žetony!")
-        elif hra.Hrac1.barva == "Černý" and len(self.zetony_bila) >= 1:
-            x = self.zetony_bila.pop(-1)
+        elif hra.Hrac1.barva == "Černý" and len(self.zetony_cerna) >= 1:
+            x = self.zetony_cerna.pop(-1)
             hra.barec.vytvor_kamen_bily(x)
-        elif hra.Hrac1.barva == "Černý" and len(self.zetony_bila) == 0:
+        elif hra.Hrac1.barva == "Černý" and len(self.zetony_cerna) == 0:
             print(print("Na baru nemáš žádné žetony!"))
 
     def pridej_do_baru(self, cil = None):                         # Přidání žetonu na bar
@@ -339,9 +343,9 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         elif akce == 5:
             hra.barec.vyhod_z_baru()
         elif akce == 6:
-            hra.Ulozit
+            hra.Ulozit()
         elif akce == 7:
-            hra.Nahrat
+            hra.Nahrat()
 
         elif hra.hozeno == 1:
             print("Už jsi házel!")
