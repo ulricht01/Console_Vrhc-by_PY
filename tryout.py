@@ -187,7 +187,7 @@ class Bar:                                                          # Třída ba
             print("Na baru nemáš žádné žetony!")
         elif hra.Hrac1.barva == "Černý" and len(self.zetony_cerna) >= 1:
             x = self.zetony_cerna.pop(-1)
-            hra.barec.vytvor_kamen_bily(x)
+            hra.barec.vytvor_kamen_cerny(x)
         elif hra.Hrac1.barva == "Černý" and len(self.zetony_cerna) == 0:
             print(print("Na baru nemáš žádné žetony!"))
 
