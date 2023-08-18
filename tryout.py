@@ -83,8 +83,10 @@ class HerniDeska:
             hra.barec.vytvor_start_cerny(23)
 
     def Ulozit(self):
-        #bar_bila_data = [{'barva': kamen[0].barva} for kamen in self.zetony_bila]
-        #bar_cerna_data = [{'barva': kamen[0].barva} for kamen in self.zetony_cerna]
+        bar_data = {
+            'zetony_bila': [[kamen.barva for kamen in pole] for pole in self.barec.zetony_bila],
+            'zetony_cerna': [[kamen.barva for kamen in pole] for pole in self.barec.zetony_cerna]
+        }
         data_1 = {
         'Jmeno': self.Hrac1.jmeno,
         'Barva': self.Hrac1.barva,
@@ -114,30 +116,11 @@ class HerniDeska:
             }
             herni_pole_data.append(pole_data)
 
-        '''barec_cerny_pole_data = []
-        for pole in self.barec.zetony_cerna:
-            barec_cerny_data = [{'barva': kamen.barva} for kamen in pole]
-            pole_data = {
-                'cerny_bar': self.barec.zetony_cerna,
-                'bar_data': barec_cerny_data,
-            }
-            barec_cerny_pole_data.append(pole_data)
-        '''
-        '''barec_bila_pole_data = []
-        for pole in self.barec.zetony_bila:
-            barec_bila_data = [{'barva': kamen.barva} for kamen in pole]
-            pole_data = {
-                'bila_bar': self.barec.zetony_bila,
-                'bar_data': barec_bila_data,
-            }
-            barec_bila_pole_data.append(pole_data)
-        '''
         data = {
             'Player1': data_1,
             'Player2': data_2,
             'HerniPole': herni_pole_data,
-            #'BarCerny': barec_cerny_pole_data,
-            #'BarBily': barec_bila_pole_data,
+            'Bar': bar_data
 
         }
                 
@@ -169,12 +152,8 @@ class HerniDeska:
         self.kostka.kostka_1 = player1_data['Kostka_1']  # Načteme hodnotu první kostky
         self.kostka.kostka_2 = player1_data['Kostka_2']  # Načteme hodnotu druhé kostky
 
-        '''bar_bila_data = data['BarBily']
-        self.barec.zetony_bila = [[HerniKamen(kamen['barva'])] for kamen in bar_bila_data]
-
-        bar_cerna_data = data['BarCerny']
-        self.barec.zetony_cerna = [[HerniKamen(kamen['barva'])] for kamen in bar_cerna_data]
-        '''
+        bar_data = data['Bar']
+        self.NacistBar(bar_data)
 
         for i, pole_data in enumerate(herni_pole_data):
             zasobnik_data = pole_data['zasobnik']
@@ -184,6 +163,23 @@ class HerniDeska:
 
         print("Hra byla nahrána.")
 
+    def NacistBar(self, bar_data):
+        self.barec.zetony_bila = []
+        self.barec.zetony_cerna = []
+
+        for radek in bar_data['zetony_bila']:
+            radek_zetonu = []
+            for barva in radek:
+                kamen = HerniKamen(barva)
+                radek_zetonu.append(kamen)
+            self.barec.zetony_bila.append(radek_zetonu)
+
+        for radek in bar_data['zetony_cerna']:
+            radek_zetonu = []
+            for barva in radek:
+                kamen = HerniKamen(barva)
+                radek_zetonu.append(kamen)
+            self.barec.zetony_cerna.append(radek_zetonu)
 
 class HerniPole:                                                    # Třída hracího pole/zásobníku
     def __init__(self, cislo_pole, zasobnik = None):                
