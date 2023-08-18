@@ -26,10 +26,6 @@ class HerniDeska:
             hrac2 = input("Jméno Ai 1: ")
             self.Hrac2 = AiHrac(hrac2, barevny_seznam[1])           # Základní nabídka pro tvorbu hry s hráčem/AI hráčem
 
-        print(hrac1, ' je ', self.Hrac1.barva)                      # Vypsání barev hráčů
-        print(hrac2, ' je ', self.Hrac2.barva)
-
-
         self.kostka = DvojKostka()
         self.barec = Bar()
         self.hozeno = 0                                             # Určuje jestli v kole již hráč hodil nebo ne, v případě, že hodil, nastaví se 1
@@ -39,6 +35,9 @@ class HerniDeska:
         for cislo in range(1, 25):
             self.herni_pole.append(HerniPole(cislo))                # Přidání polí pro hrací plochu
         
+    def vypis_hrace(self):
+        print(self.Hrac1.jmeno, ' je ', self.Hrac1.barva)                      # Vypsání barev hráčů
+        print(self.Hrac2.jmeno, ' je ', self.Hrac2.barva)
     
     def vytvor_hraci_plochu(self):
         if self.Hrac1.barva == "Bílý":                              # Výpis pole na hrací ploše pro určení, kolik má hráč žetonů na baru
@@ -66,6 +65,8 @@ class HerniDeska:
                                       +--------------+--------------+
                                            
         """                                                         # Výpis hrací plochy do konzole
+        print('---------------------------------------')                                                        
+        self.vypis_hrace()
         print(plocha)
 
     def priprav_hru(self):                                          # Vytvoření základního rozestavení žetonů
@@ -82,41 +83,105 @@ class HerniDeska:
             hra.barec.vytvor_start_cerny(23)
 
     def Ulozit(self):
-        data = {
-            #'Bily': '',        ???
-            #'Cerny': '',       ???
-            'Player1': {
-                'Jmeno': self.Hrac1.jmeno,
-                'Barva': self.Hrac1.barva,
-                'Score': self.barec.pocet_zetonu_bila,
-            },
-            'Player2': {
-                'Jmeno': self.Hrac2.jmeno,
-                'Barva': self.Hrac2.barva,
-                'Score': self.barec.pocet_zetonu_cerna,
-            }
+        #bar_bila_data = [{'barva': kamen[0].barva} for kamen in self.zetony_bila]
+        #bar_cerna_data = [{'barva': kamen[0].barva} for kamen in self.zetony_cerna]
+        data_1 = {
+        'Jmeno': self.Hrac1.jmeno,
+        'Barva': self.Hrac1.barva,
+        'PlayerType': "KonzolovyHrac",
+        'Score': self.barec.pocet_zetonu_bila,
+        'Kostka_1': self.kostka.kostka_1,
+        'Kostka_2': self.kostka.kostka_2,
+        #'Bar': bar_bila_data,
         }
+        data_2 = {
+        'Jmeno': self.Hrac2.jmeno,
+        'Barva': self.Hrac2.barva,
+        'PlayerType': "KonzolovyHrac",
+        'Score': self.barec.pocet_zetonu_cerna,
+        'Kostka_1': self.kostka.kostka_1,
+        'Kostka_2': self.kostka.kostka_2,
+        #'Bar': bar_cerna_data,
+        }
+
+        herni_pole_data = []
+        for pole in self.herni_pole:
+            zasobnik_data = [{'barva': kamen.barva} for kamen in pole.zasobnik]
+            pole_data = {
+                'cislo_pole': pole.cislo_pole,
+                'zasobnik': zasobnik_data,
+                'barva': pole.barva,
+            }
+            herni_pole_data.append(pole_data)
+
+        '''barec_cerny_pole_data = []
+        for pole in self.barec.zetony_cerna:
+            barec_cerny_data = [{'barva': kamen.barva} for kamen in pole]
+            pole_data = {
+                'cerny_bar': self.barec.zetony_cerna,
+                'bar_data': barec_cerny_data,
+            }
+            barec_cerny_pole_data.append(pole_data)
+        '''
+        '''barec_bila_pole_data = []
+        for pole in self.barec.zetony_bila:
+            barec_bila_data = [{'barva': kamen.barva} for kamen in pole]
+            pole_data = {
+                'bila_bar': self.barec.zetony_bila,
+                'bar_data': barec_bila_data,
+            }
+            barec_bila_pole_data.append(pole_data)
+        '''
+        data = {
+            'Player1': data_1,
+            'Player2': data_2,
+            'HerniPole': herni_pole_data,
+            #'BarCerny': barec_cerny_pole_data,
+            #'BarBily': barec_bila_pole_data,
+
+        }
+                
         with open(self.file_path, 'w') as file:
             json.dump(data, file)
         print("Hra byla uložena.")
 
+    def load_player_data(self, player_data):
+        if player_data['PlayerType'] == "KonzolovyHrac":
+            return KonzolovyHrac(player_data['Jmeno'], player_data['Barva'])
+        elif player_data['PlayerType'] == "AiHrac":
+            return AiHrac(player_data['Jmeno'], player_data['Barva'])
+        else:
+            return None
+
     def Nahrat(self):
-        data = {
-            #'Bily': '',        ???
-            #'Cerny': '',       ???
-            'Player1': {
-                'Jmeno': self.Hrac1.jmeno,
-                'Barva': self.Hrac1.barva,
-                'Score': '',
-            },
-            'Player2': {
-                'Jmeno': self.Hrac2.jmeno,
-                'Barva': self.Hrac2.barva,
-                'Score': '',
-            }
-        }
         with open(self.file_path, 'r') as file:
-            json.load(file)
+            data = json.load(file)
+
+        player1_data = data['Player1']
+        player2_data = data['Player2']
+        herni_pole_data = data['HerniPole']
+
+        self.Hrac1 = self.load_player_data(player1_data)
+        self.Hrac2 = self.load_player_data(player2_data)
+        self.barec.pocet_zetonu_bila = player1_data['Score']
+        self.barec.pocet_zetonu_cerna = player2_data['Score']
+
+        self.kostka.kostka_1 = player1_data['Kostka_1']  # Načteme hodnotu první kostky
+        self.kostka.kostka_2 = player1_data['Kostka_2']  # Načteme hodnotu druhé kostky
+
+        '''bar_bila_data = data['BarBily']
+        self.barec.zetony_bila = [[HerniKamen(kamen['barva'])] for kamen in bar_bila_data]
+
+        bar_cerna_data = data['BarCerny']
+        self.barec.zetony_cerna = [[HerniKamen(kamen['barva'])] for kamen in bar_cerna_data]
+        '''
+
+        for i, pole_data in enumerate(herni_pole_data):
+            zasobnik_data = pole_data['zasobnik']
+            zasobnik = [HerniKamen(kamen['barva']) for kamen in zasobnik_data]
+            self.herni_pole[i].zasobnik = zasobnik
+            self.herni_pole[i].barva = pole_data['barva']
+
         print("Hra byla nahrána.")
 
 
@@ -346,6 +411,7 @@ class KonzolovyHrac(Hrac):                                              # Tříd
             hra.Ulozit()
         elif akce == 7:
             hra.Nahrat()
+            
 
         elif hra.hozeno == 1:
             print("Už jsi házel!")
