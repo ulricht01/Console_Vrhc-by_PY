@@ -424,11 +424,11 @@ hra.priprav_hru()                   # Připravení hry
 while True:                         # Herní cyklus
     hra.vytvor_hraci_plochu()
     if hra.token == 0:              # Podmínka, která kontroluje, kdo je na řadě
-        print(f"Na tahu je hráč: {hra.Hrac1.jmeno}")
+        print(f"Na tahu je hráč: {hra.Hrac1.jmeno} ({hra.Hrac1.barva})")
         print('------------------------')
         hra.Hrac1.nabidka()
     elif hra.token == 1:            # To co dělá hráč, zatím pro účely testování, pouze ukončí tah
-        print(f"Na tahu je hráč: {hra.Hrac2.jmeno}")
+        print(f"Na tahu je hráč: {hra.Hrac2.jmeno} ({hra.Hrac2.barva})")
         print('------------------------')
         hra.Hrac2.nabidka() 
 
