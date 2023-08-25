@@ -30,6 +30,8 @@ class HerniDeska:
         self.barec = Bar()
         self.hozeno = 0                                             # Určuje jestli v kole již hráč hodil nebo ne, v případě, že hodil, nastaví se 1
         self.presuny = 0
+        self.cilove_pole_bila = []
+        self.cilove_pole_cerna = []
 
         self.herni_pole = []                                        # Vytvoření seznamzu herního pole
         for cislo in range(1, 25):
@@ -50,15 +52,15 @@ class HerniDeska:
             self.herni_pole[i].barva_pole()                         # Nastavení barvy pole dle funkce barva_pole(), která určuje podle žetonů na daném zásobníku svou barvu
 
         plocha = f"""
-        +------+------+------+------+------+------+-----+------+------+------+------+------+------+--------+
-        |  13  |  14  |  15  |  16  |  17  |  18  | BAR |  19  |  20  |  21  |  22  |  23  |  24  |   CIL  |
-        |  {self.herni_pole[12].barva}   |  {self.herni_pole[13].barva}   |  {self.herni_pole[14].barva}   |  {self.herni_pole[15].barva}   |  {self.herni_pole[16].barva}   |  {self.herni_pole[17].barva}   |     |  {self.herni_pole[18].barva}   |  {self.herni_pole[19].barva}   |  {self.herni_pole[20].barva}   |  {self.herni_pole[21].barva}   |  {self.herni_pole[22].barva}   |  {self.herni_pole[23].barva}   |        |
-        |  {len(self.herni_pole[12].zasobnik)}   |  {len(self.herni_pole[13].zasobnik)}   |  {len(self.herni_pole[14].zasobnik)}   |  {len(self.herni_pole[15].zasobnik)}   |  {len(self.herni_pole[16].zasobnik)}   |  {len(self.herni_pole[17].zasobnik)}   |  {pocet_zetonu_hrac1}  |  {len(self.herni_pole[18].zasobnik)}   |  {len(self.herni_pole[19].zasobnik)}   |  {len(self.herni_pole[20].zasobnik)}   |  {len(self.herni_pole[21].zasobnik)}   |  {len(self.herni_pole[22].zasobnik)}   |  {len(self.herni_pole[23].zasobnik)}   |        | {hra.Hrac1.barva}
-        +------+------+------+------+------+------+-----+------+------+------+------+------+------+--------+
-        |  12  |  11  |  10  |   9  |   8  |   7  |     |   6  |   5  |   4  |   3  |   2  |   1  |        |
-        |  {self.herni_pole[11].barva}   |  {self.herni_pole[10].barva}   |  {self.herni_pole[9].barva}   |  {self.herni_pole[8].barva}   |  {self.herni_pole[7].barva}   |  {self.herni_pole[6].barva}   |     |  {self.herni_pole[5].barva}   |  {self.herni_pole[4].barva}   |  {self.herni_pole[3].barva}   |  {self.herni_pole[2].barva}   |  {self.herni_pole[1].barva}   |  {self.herni_pole[0].barva}   |        |
-        |  {len(self.herni_pole[11].zasobnik)}   |  {len(self.herni_pole[10].zasobnik)}   |  {len(self.herni_pole[9].zasobnik)}   |  {len(self.herni_pole[8].zasobnik)}   |  {len(self.herni_pole[7].zasobnik)}   |  {len(self.herni_pole[6].zasobnik)}   |  {pocet_zetonu_hrac2}  |  {len(self.herni_pole[5].zasobnik)}   |  {len(self.herni_pole[4].zasobnik)}   |  {len(self.herni_pole[3].zasobnik)}   |  {len(self.herni_pole[2].zasobnik)}   |  {len(self.herni_pole[1].zasobnik)}   |  {len(self.herni_pole[0].zasobnik)}   |        | {hra.Hrac2.barva}
-        +------+------+------+------+------+------+-----+------+------+------+------+------+------+--------+
+        +------+------+------+------+------+------+-----+------+------+------+------+------+------+-------+
+        |  13  |  14  |  15  |  16  |  17  |  18  | BAR |  19  |  20  |  21  |  22  |  23  |  24  |  CIL  |
+        |  {self.herni_pole[12].barva}   |  {self.herni_pole[13].barva}   |  {self.herni_pole[14].barva}   |  {self.herni_pole[15].barva}   |  {self.herni_pole[16].barva}   |  {self.herni_pole[17].barva}   |     |  {self.herni_pole[18].barva}   |  {self.herni_pole[19].barva}   |  {self.herni_pole[20].barva}   |  {self.herni_pole[21].barva}   |  {self.herni_pole[22].barva}   |  {self.herni_pole[23].barva}   |       |
+        |  {len(self.herni_pole[12].zasobnik)}   |  {len(self.herni_pole[13].zasobnik)}   |  {len(self.herni_pole[14].zasobnik)}   |  {len(self.herni_pole[15].zasobnik)}   |  {len(self.herni_pole[16].zasobnik)}   |  {len(self.herni_pole[17].zasobnik)}   |  {pocet_zetonu_hrac1}  |  {len(self.herni_pole[18].zasobnik)}   |  {len(self.herni_pole[19].zasobnik)}   |  {len(self.herni_pole[20].zasobnik)}   |  {len(self.herni_pole[21].zasobnik)}   |  {len(self.herni_pole[22].zasobnik)}   |  {len(self.herni_pole[23].zasobnik)}   |   {len(self.cilove_pole_bila)}   | Bílá
+        +------+------+------+------+------+------+-----+------+------+------+------+------+------+-------+
+        |  12  |  11  |  10  |   9  |   8  |   7  |     |   6  |   5  |   4  |   3  |   2  |   1  |       |
+        |  {self.herni_pole[11].barva}   |  {self.herni_pole[10].barva}   |  {self.herni_pole[9].barva}   |  {self.herni_pole[8].barva}   |  {self.herni_pole[7].barva}   |  {self.herni_pole[6].barva}   |     |  {self.herni_pole[5].barva}   |  {self.herni_pole[4].barva}   |  {self.herni_pole[3].barva}   |  {self.herni_pole[2].barva}   |  {self.herni_pole[1].barva}   |  {self.herni_pole[0].barva}   |       |
+        |  {len(self.herni_pole[11].zasobnik)}   |  {len(self.herni_pole[10].zasobnik)}   |  {len(self.herni_pole[9].zasobnik)}   |  {len(self.herni_pole[8].zasobnik)}   |  {len(self.herni_pole[7].zasobnik)}   |  {len(self.herni_pole[6].zasobnik)}   |  {pocet_zetonu_hrac2}  |  {len(self.herni_pole[5].zasobnik)}   |  {len(self.herni_pole[4].zasobnik)}   |  {len(self.herni_pole[3].zasobnik)}   |  {len(self.herni_pole[2].zasobnik)}   |  {len(self.herni_pole[1].zasobnik)}   |  {len(self.herni_pole[0].zasobnik)}   |   {len(self.cilove_pole_cerna)}   | Černá
+        +------+------+------+------+------+------+-----+------+------+------+------+------+------+-------+
                                       +-----------------------------+
                                       |   Kostka 1   |   Kostka 2   |
                                       |      {self.kostka.kostka_1}       |      {self.kostka.kostka_2}       |
@@ -292,18 +294,32 @@ class KonzolovyHrac(Hrac):                                              # Tříd
             print("3) O počet na obou kostkách")
             inp = int(input("Zadej: "))
             if inp == 1:                                                # Možnost pohybu o první kostku
-                cil = hra.kostka.kostka_1
+                if self.barva == 'Černý':
+                    cil = start - hra.kostka.kostka_1
+                else:
+                    cil = start + hra.kostka.kostka_1
             elif inp == 2:
-                cil = hra.kostka.kostka_2                               # Možnost pohybu o druhou kostku
+                if self.barva == 'Černý':
+                    cil = start - hra.kostka.kostka_2
+                else:
+                    cil = start + hra.kostka.kostka_2                               # Možnost pohybu o druhou kostku
             elif inp == 3:
-                cil = hra.kostka.kostka_1 + hra.kostka.kostka_2         # Možnost pohybu o součet obou kostek
+                if self.barva == 'Černý':
+                    cil = start - hra.kostka.kostka_2
+                else:
+                    cil = start + hra.kostka.kostka_2                           # Možnost pohybu o součet obou kostek
 
-            if start < 1 or start > 24 or cil < 1 or cil > 24:                  # Ošetření, aby hráč nevybral neexistující pole
-                print("Neplatné číslo pole!")
-                return
+            if self.barva == 'Černý':
+                if start < 1 or start > 24 or cil < 1 or cil > 24 or cil > start:
+                    print("Neplatné číslo pole!")
+                    return
+            else:
+                if start < 1 or start > 24 or cil < 1 or cil > 24 or cil < start:
+                    print("Neplatné číslo pole!")
+                    return
 
-            pole_start = hra.herni_pole[start - 1]                              
-            pole_cil = hra.herni_pole[start+cil - 1]
+            pole_start = hra.herni_pole[start - 1]
+            pole_cil = hra.herni_pole[cil - 1]
 
             if len(pole_cil.zasobnik) == 5:                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
                 print("Tento zásobník je již plný!")
@@ -348,25 +364,21 @@ class KonzolovyHrac(Hrac):                                              # Tříd
                                 hra.presuny = 2
                                 hra.kostka.kostka_1 = 0
                                 hra.kostka.kostka_2 = 0
-                    """else:
-                        pole_start.zasobnik.remove(pole_start.zasobnik[0])
-                        pole_cil.zasobnik.append(temp[0])
-                        if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
-                            hra.presuny = hra.presuny + 1
-                            print(hra.presuny)
-                            hra.kostka.kostka_1 = 0
-                        elif inp == 2:
-                            hra.presuny = hra.presuny + 1
-                            print(hra.presuny)
-                            hra.kostka.kostka_2 = 0
-                        elif inp == 3:
-                            hra.presuny = 2
-                            hra.kostka.kostka_1 = 0
-                            hra.kostka.kostka_2 = 0"""
+
                 else:
                     print("Pole ze kterého se snažíte brát, je prázdné!")
         elif hra.presuny == 2:
             print("Už jsi táhl za obě kostky!")
+
+    def jedu_do_cile(self):
+        kontrola_cerna = len(hra.herni_pole[0].zasobnik) + len(hra.herni_pole[1].zasobnik) + len(hra.herni_pole[2].zasobnik) + len(hra.herni_pole[3].zasobnik) + len(hra.herni_pole[4].zasobnik) + len(hra.herni_pole[5].zasobnik)
+        vse_akt_zetony_cerna = 15 - hra.cilove_pole_cerna
+        kontrola_bila = len(hra.herni_pole[18].zasobnik) + len(hra.herni_pole[19].zasobnik) + len(hra.herni_pole[20].zasobnik) + len(hra.herni_pole[21].zasobnik) + len(hra.herni_pole[22].zasobnik) + len(hra.herni_pole[23].zasobnik)
+        vse_akt_zetony_bila = 15 - hra.cilove_pole_bila
+        if hra.Hrac1.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or hra.Hrac1.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
+            pass
+        elif hra.Hrac2.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or hra.Hrac2.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
+            pass
 
     def nabidka(self):                                  # Nabídka pro hráče a jeho možné akce
         print("1) Hod kostkami!")
