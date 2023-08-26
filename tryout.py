@@ -388,6 +388,7 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         print("5) Vyjed z baru!")
         print("6) Uložit hru")
         print("7) Nahrát hru")
+        print("8) Ukončit hru")
         akce = int(input("Zadej akci: "))
         if akce == 1 and hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
             if hra.token == 0:                        
@@ -420,7 +421,8 @@ class KonzolovyHrac(Hrac):                                              # Tříd
             hra.Ulozit()
         elif akce == 7:
             hra.Nahrat()
-            
+        elif akce == 8:
+            sys.exit(0)
 
         elif hra.hozeno == 1:
             print("Už jsi házel!")
