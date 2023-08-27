@@ -55,11 +55,11 @@ class HerniDeska:
         +------+------+------+------+------+------+-----+------+------+------+------+------+------+-------+
         |  13  |  14  |  15  |  16  |  17  |  18  | BAR |  19  |  20  |  21  |  22  |  23  |  24  |  CIL  |
         |  {self.herni_pole[12].barva}   |  {self.herni_pole[13].barva}   |  {self.herni_pole[14].barva}   |  {self.herni_pole[15].barva}   |  {self.herni_pole[16].barva}   |  {self.herni_pole[17].barva}   |     |  {self.herni_pole[18].barva}   |  {self.herni_pole[19].barva}   |  {self.herni_pole[20].barva}   |  {self.herni_pole[21].barva}   |  {self.herni_pole[22].barva}   |  {self.herni_pole[23].barva}   |       |
-        |  {len(self.herni_pole[12].zasobnik)}   |  {len(self.herni_pole[13].zasobnik)}   |  {len(self.herni_pole[14].zasobnik)}   |  {len(self.herni_pole[15].zasobnik)}   |  {len(self.herni_pole[16].zasobnik)}   |  {len(self.herni_pole[17].zasobnik)}   |  {pocet_zetonu_hrac1}  |  {len(self.herni_pole[18].zasobnik)}   |  {len(self.herni_pole[19].zasobnik)}   |  {len(self.herni_pole[20].zasobnik)}   |  {len(self.herni_pole[21].zasobnik)}   |  {len(self.herni_pole[22].zasobnik)}   |  {len(self.herni_pole[23].zasobnik)}   |   {len(self.cilove_pole_bila)}   | Bílá
+        |  {len(self.herni_pole[12].zasobnik)}   |  {len(self.herni_pole[13].zasobnik)}   |  {len(self.herni_pole[14].zasobnik)}   |  {len(self.herni_pole[15].zasobnik)}   |  {len(self.herni_pole[16].zasobnik)}   |  {len(self.herni_pole[17].zasobnik)}   |  {len(self.barec.zetony_bila)}  |  {len(self.herni_pole[18].zasobnik)}   |  {len(self.herni_pole[19].zasobnik)}   |  {len(self.herni_pole[20].zasobnik)}   |  {len(self.herni_pole[21].zasobnik)}   |  {len(self.herni_pole[22].zasobnik)}   |  {len(self.herni_pole[23].zasobnik)}   |   {len(self.cilove_pole_bila)}   | Bílá
         +------+------+------+------+------+------+-----+------+------+------+------+------+------+-------+
         |  12  |  11  |  10  |   9  |   8  |   7  |     |   6  |   5  |   4  |   3  |   2  |   1  |       |
         |  {self.herni_pole[11].barva}   |  {self.herni_pole[10].barva}   |  {self.herni_pole[9].barva}   |  {self.herni_pole[8].barva}   |  {self.herni_pole[7].barva}   |  {self.herni_pole[6].barva}   |     |  {self.herni_pole[5].barva}   |  {self.herni_pole[4].barva}   |  {self.herni_pole[3].barva}   |  {self.herni_pole[2].barva}   |  {self.herni_pole[1].barva}   |  {self.herni_pole[0].barva}   |       |
-        |  {len(self.herni_pole[11].zasobnik)}   |  {len(self.herni_pole[10].zasobnik)}   |  {len(self.herni_pole[9].zasobnik)}   |  {len(self.herni_pole[8].zasobnik)}   |  {len(self.herni_pole[7].zasobnik)}   |  {len(self.herni_pole[6].zasobnik)}   |  {pocet_zetonu_hrac2}  |  {len(self.herni_pole[5].zasobnik)}   |  {len(self.herni_pole[4].zasobnik)}   |  {len(self.herni_pole[3].zasobnik)}   |  {len(self.herni_pole[2].zasobnik)}   |  {len(self.herni_pole[1].zasobnik)}   |  {len(self.herni_pole[0].zasobnik)}   |   {len(self.cilove_pole_cerna)}   | Černá
+        |  {len(self.herni_pole[11].zasobnik)}   |  {len(self.herni_pole[10].zasobnik)}   |  {len(self.herni_pole[9].zasobnik)}   |  {len(self.herni_pole[8].zasobnik)}   |  {len(self.herni_pole[7].zasobnik)}   |  {len(self.herni_pole[6].zasobnik)}   |  {len(self.barec.zetony_cerna)}  |  {len(self.herni_pole[5].zasobnik)}   |  {len(self.herni_pole[4].zasobnik)}   |  {len(self.herni_pole[3].zasobnik)}   |  {len(self.herni_pole[2].zasobnik)}   |  {len(self.herni_pole[1].zasobnik)}   |  {len(self.herni_pole[0].zasobnik)}   |   {len(self.cilove_pole_cerna)}   | Černá
         +------+------+------+------+------+------+-----+------+------+------+------+------+------+-------+
                                       +-----------------------------+
                                       |   Kostka 1   |   Kostka 2   |
@@ -287,7 +287,7 @@ class Hrac:                                                         # Třída hr
 
 class KonzolovyHrac(Hrac):                                              # Třída konzolového hráče
     def tah(self, temp= []):                                            # Metoda pohybu žetonu hráče
-        if hra.presuny < 2:
+        if hra.presuny < 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 or hra.presuny < 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0:
             start = int(input("Zadej číslo pole, odkud vybíráš: "))     
             print("1) O počet na 1. kostce")
             print("2) O počet na 2. kostce")
@@ -305,9 +305,9 @@ class KonzolovyHrac(Hrac):                                              # Tříd
                     cil = start + hra.kostka.kostka_2                               # Možnost pohybu o druhou kostku
             elif inp == 3:
                 if self.barva == 'Černý':
-                    cil = start - hra.kostka.kostka_2
+                    cil = start - hra.kostka.kostka_1 - hra.kostka.kostka_2
                 else:
-                    cil = start + hra.kostka.kostka_2                           # Možnost pohybu o součet obou kostek
+                    cil = start + hra.kostka.kostka_1 + hra.kostka.kostka_2                           # Možnost pohybu o součet obou kostek
 
             if self.barva == 'Černý':
                 if start < 1 or start > 24 or cil < 1 or cil > 24 or cil > start:
@@ -320,6 +320,13 @@ class KonzolovyHrac(Hrac):                                              # Tříd
 
             pole_start = hra.herni_pole[start - 1]
             pole_cil = hra.herni_pole[cil - 1]
+            
+            if self.barva == "Černý":
+                vyhazovac = start - cil - 1
+                print(vyhazovac)
+            if self.barva == "Bílý":
+                vyhazovac = start + cil - 1 
+                print(vyhazovac)
 
             if len(pole_cil.zasobnik) == 5:                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
                 print("Tento zásobník je již plný!")
@@ -334,16 +341,14 @@ class KonzolovyHrac(Hrac):                                              # Tříd
                         print("Na poli nejsou tvé žetony!")
                     elif pole_cil.barva == pole_start.barva or pole_cil.barva == "N" or pole_cil.barva != pole_start.barva and len(pole_cil.zasobnik) == 1:
                         if pole_cil.barva != pole_start.barva and len(pole_cil.zasobnik) == 1:
-                            hra.barec.pridej_do_baru(start+cil-1)
+                            hra.barec.pridej_do_baru(vyhazovac)
                             pole_start.zasobnik.remove(pole_start.zasobnik[0])
                             pole_cil.zasobnik.append(temp[0])
                             if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
                                 hra.presuny = hra.presuny + 1
-                                print(hra.presuny)
                                 hra.kostka.kostka_1 = 0
                             elif inp == 2:
                                 hra.presuny = hra.presuny + 1
-                                print(hra.presuny)
                                 hra.kostka.kostka_2 = 0
                             elif inp == 3:
                                 hra.presuny = 2
@@ -354,11 +359,9 @@ class KonzolovyHrac(Hrac):                                              # Tříd
                             pole_cil.zasobnik.append(temp[0])
                             if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
                                 hra.presuny = hra.presuny + 1
-                                print(hra.presuny)
                                 hra.kostka.kostka_1 = 0
                             elif inp == 2:
                                 hra.presuny = hra.presuny + 1
-                                print(hra.presuny)
                                 hra.kostka.kostka_2 = 0
                             elif inp == 3:
                                 hra.presuny = 2
@@ -369,16 +372,110 @@ class KonzolovyHrac(Hrac):                                              # Tříd
                     print("Pole ze kterého se snažíte brát, je prázdné!")
         elif hra.presuny == 2:
             print("Už jsi táhl za obě kostky!")
+        elif self.barva == "Černý" and len(hra.barec.zetony_cerna) > 0 or self.barva == "Bílý" and len(hra.barec.zetony_bila) >0:
+            print("Nejdřív vyjeď z baru!")
 
     def jedu_do_cile(self):
         kontrola_cerna = len(hra.herni_pole[0].zasobnik) + len(hra.herni_pole[1].zasobnik) + len(hra.herni_pole[2].zasobnik) + len(hra.herni_pole[3].zasobnik) + len(hra.herni_pole[4].zasobnik) + len(hra.herni_pole[5].zasobnik)
-        vse_akt_zetony_cerna = 15 - hra.cilove_pole_cerna
+        vse_akt_zetony_cerna = 15 - len(hra.cilove_pole_cerna)
         kontrola_bila = len(hra.herni_pole[18].zasobnik) + len(hra.herni_pole[19].zasobnik) + len(hra.herni_pole[20].zasobnik) + len(hra.herni_pole[21].zasobnik) + len(hra.herni_pole[22].zasobnik) + len(hra.herni_pole[23].zasobnik)
-        vse_akt_zetony_bila = 15 - hra.cilove_pole_bila
+        vse_akt_zetony_bila = 15 - len(hra.cilove_pole_bila)
         if hra.Hrac1.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or hra.Hrac1.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
-            pass
+            if hra.presuny < 2:
+                start = int(input("Zadej číslo pole, odkud vybíráš: "))     
+                print("1) O počet na 1. kostce")
+                print("2) O počet na 2. kostce")
+                inp = int(input("Zadej: "))
+                if inp == 1:                                                # Možnost pohybu o první kostku
+                    if self.barva == 'Černý':
+                        cil = start - hra.kostka.kostka_1
+                    else:
+                        cil = start + hra.kostka.kostka_1
+                elif inp == 2:
+                    if self.barva == 'Černý':
+                        cil = start - hra.kostka.kostka_2
+                    else:
+                        cil = start + hra.kostka.kostka_2                               # Možnost pohybu o druhou kostku
+                if self.barva == 'Černý':
+                    if start > 6 or start < 0 and start != 0:
+                        print("Neplatné číslo pole!")
+                        return
+                else:
+                    if start < 19 or start > 24 and cil != 25:
+                        print("Neplatné číslo pole!")
+                        return
+
+                pole_start = hra.herni_pole[start - 1]
+                if self.barva == "Černý":
+                    pole_cil = hra.cilove_pole_cerna
+                elif self.barva == "Bílý":
+                    pole_cil = hra.cilove_pole_cerna
+
+                if cil == 0 and self.barva == "Černá" or cil == 25 and self.barva == "Bílý":                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
+                    temp =[]
+                    temp.append(pole_start.zasobnik[0])
+                    pole_cil.zasobnik.append(temp[0])
+                    pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                    if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
+                        hra.presuny = hra.presuny + 1
+                        hra.kostka.kostka_1 = 0
+                    elif inp == 2:
+                        hra.presuny = hra.presuny + 1
+                        hra.kostka.kostka_2 = 0
+                else:
+                    print("Něco se pokazilo")
+
+            elif hra.presuny == 2:
+                print("Už jsi táhl za obě kostky!")
         elif hra.Hrac2.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or hra.Hrac2.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
-            pass
+            if hra.presuny < 2:
+                start = int(input("Zadej číslo pole, odkud vybíráš: "))     
+                print("1) O počet na 1. kostce")
+                print("2) O počet na 2. kostce")
+                inp = int(input("Zadej: "))
+                if inp == 1:                                                # Možnost pohybu o první kostku
+                    if self.barva == 'Černý':
+                        cil = start - hra.kostka.kostka_1
+                    else:
+                        cil = start + hra.kostka.kostka_1
+                elif inp == 2:
+                    if self.barva == 'Černý':
+                        cil = start - hra.kostka.kostka_2
+                    else:
+                        cil = start + hra.kostka.kostka_2                               # Možnost pohybu o druhou kostku
+                if self.barva == 'Černý':
+                    if start > 6 or start < 0 and start != 0:
+                        print("Neplatné číslo pole!")
+                        return
+                else:
+                    if start < 19 or start > 24 and cil != 25:
+                        print("Neplatné číslo pole!")
+                        return
+
+                pole_start = hra.herni_pole[start - 1]
+                if self.barva == "Černý":
+                    pole_cil = hra.cilove_pole_cerna
+                elif self.barva == "Bílý":
+                    pole_cil = hra.cilove_pole_cerna
+
+                if cil == 0 and self.barva == "Černá" or cil == 25 and self.barva == "Bílý":                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
+                    temp =[]
+                    temp.append(pole_start.zasobnik[0])
+                    pole_cil.zasobnik.append(temp[0])
+                    pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                    if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
+                        hra.presuny = hra.presuny + 1
+                        hra.kostka.kostka_1 = 0
+                    elif inp == 2:
+                        hra.presuny = hra.presuny + 1
+                        hra.kostka.kostka_2 = 0
+                else:
+                    print("Něco se pokazilo")
+
+            elif hra.presuny == 2:
+                print("Už jsi táhl za obě kostky!")
+        else:
+            print("Nemáš všechny žetony na posledních polích!")
 
     def nabidka(self):                                  # Nabídka pro hráče a jeho možné akce
         print("1) Hod kostkami!")
@@ -386,8 +483,9 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         print("3) Zobraz plochu!")
         print("4) Ukonči tah!")
         print("5) Vyjed z baru!")
-        print("6) Uložit hru")
-        print("7) Nahrát hru")
+        print("6) Jedu do cíle")
+        print("7) Uložit hru")
+        print("8) Nahrát hru")
         akce = int(input("Zadej akci: "))
         if akce == 1 and hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
             if hra.token == 0:                        
@@ -417,8 +515,13 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         elif akce == 5:
             hra.barec.vyhod_z_baru()
         elif akce == 6:
-            hra.Ulozit()
+            if hra.token == 0:
+                hra.Hrac1.jedu_do_cile()
+            else:
+                hra.Hrac2.jedu_do_cile()
         elif akce == 7:
+            hra.Ulozit()
+        elif akce == 8:
             hra.Nahrat()
             
 
