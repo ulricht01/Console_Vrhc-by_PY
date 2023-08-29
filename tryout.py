@@ -43,11 +43,11 @@ class HerniDeska:
     
     def vytvor_hraci_plochu(self):
         if self.Hrac1.barva == "Bílý":                              # Výpis pole na hrací ploše pro určení, kolik má hráč žetonů na baru
-            pocet_zetonu_hrac1 = len(self.barec.zetony_bila)
-            pocet_zetonu_hrac2 = len(self.barec.zetony_cerna)     
+            self.pocet_zetonu_hrac1 = len(self.barec.zetony_bila)
+            self.pocet_zetonu_hrac2 = len(self.barec.zetony_cerna)     
         else:
-            pocet_zetonu_hrac1 = len(self.barec.zetony_cerna)
-            pocet_zetonu_hrac2 = len(self.barec.zetony_bila)
+            self.pocet_zetonu_hrac1 = len(self.barec.zetony_cerna)
+            self.pocet_zetonu_hrac2 = len(self.barec.zetony_bila)
         for i in range(0,24):
             self.herni_pole[i].barva_pole()                         # Nastavení barvy pole dle funkce barva_pole(), která určuje podle žetonů na daném zásobníku svou barvu
 
