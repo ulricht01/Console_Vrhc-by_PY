@@ -43,11 +43,11 @@ class HerniDeska:
     
     def vytvor_hraci_plochu(self):
         if self.Hrac1.barva == "Bílý":                              # Výpis pole na hrací ploše pro určení, kolik má hráč žetonů na baru
-            pocet_zetonu_hrac1 = len(self.barec.zetony_bila)
-            pocet_zetonu_hrac2 = len(self.barec.zetony_cerna)     
+            self.pocet_zetonu_hrac1 = len(self.barec.zetony_bila)
+            self.pocet_zetonu_hrac2 = len(self.barec.zetony_cerna)     
         else:
-            pocet_zetonu_hrac1 = len(self.barec.zetony_cerna)
-            pocet_zetonu_hrac2 = len(self.barec.zetony_bila)
+            self.pocet_zetonu_hrac1 = len(self.barec.zetony_cerna)
+            self.pocet_zetonu_hrac2 = len(self.barec.zetony_bila)
         for i in range(0,24):
             self.herni_pole[i].barva_pole()                         # Nastavení barvy pole dle funkce barva_pole(), která určuje podle žetonů na daném zásobníku svou barvu
 
@@ -486,6 +486,7 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         print("6) Jedu do cíle")
         print("7) Uložit hru")
         print("8) Nahrát hru")
+        print("9) Ukončit hru")
         akce = int(input("Zadej akci: "))
         if akce == 1 and hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
             if hra.token == 0:                        
@@ -523,6 +524,8 @@ class KonzolovyHrac(Hrac):                                              # Tříd
             hra.Ulozit()
         elif akce == 8:
             hra.Nahrat()
+        elif akce == 9:
+            sys.exit()
             
 
         elif hra.hozeno == 1:
