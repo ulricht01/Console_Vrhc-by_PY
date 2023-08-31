@@ -306,7 +306,52 @@ class Hrac:                                                         # Třída hr
 
 class KonzolovyHrac(Hrac):                                              # Třída konzolového hráče
     def tah(self, temp= []):                                            # Metoda pohybu žetonu hráče
-        if hra.presuny < 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 or hra.presuny < 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0:
+        if hra.presuny < 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 and hra.hozeno == 1 or hra.presuny < 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0 and hra.hozeno ==1:
+            print("Tvé možné pohyby jsou: ")
+            if self.barva == "Bílý":
+                for pole in hra.herni_pole:
+                    if pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) == 1 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) == 1 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) == 1 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) == 1 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) < 5:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_1} | {pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_2}")
+                        if hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 != 0:
+                            print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_3} | {pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_4}")
+                        elif hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 == 0:
+                            print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_3}")
+                        elif hra.kostka.kostka_3 == 0 and hra.kostka.kostka_4 != 0:
+                            print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_4}")
+
+            if self.barva == "Černý":
+                for pole in hra.herni_pole:
+                    if pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) == 1 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) == 1 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) == 1 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) == 1 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) < 5:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_1} | {pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_2}")
+                        if hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 != 0:
+                            print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_3} | {pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_4}")
+                        elif hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 == 0:
+                            print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_3}")
+                        elif hra.kostka.kostka_3 == 0 and hra.kostka.kostka_4 != 0:
+                            print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_4}")
+
             start = int(input("Zadej číslo pole, odkud vybíráš: "))
             if hra.kostka.kostka_1 != hra.kostka.kostka_2:     
                 print("1) O počet na 1. kostce")
@@ -404,6 +449,8 @@ class KonzolovyHrac(Hrac):                                              # Tříd
                     print("Pole ze kterého se snažíte brát, je prázdné!")
         elif hra.presuny == 2:
             print("Už jsi táhl za obě kostky!")
+        elif hra.hozeno == 0:
+            print("Nejdřív si hoď!")
         elif self.barva == "Černý" and len(hra.barec.zetony_cerna) > 0 or self.barva == "Bílý" and len(hra.barec.zetony_bila) >0:
             print("Nejdřív vyjeď z baru!")
 
@@ -643,7 +690,6 @@ while True:                         # Herní cyklus
     elif hra.token == 1:            # To co dělá hráč, zatím pro účely testování, pouze ukončí tah
         print(f"Na tahu je hráč: {hra.Hrac2.jmeno} ({hra.Hrac2.barva})")
         print('------------------------')
-        #hra.Hrac2.nabidka() 
-        hra.Hrac2.prerus_tah()
+        hra.Hrac2.nabidka() 
 
     input("-----------------------------------------------------STISKNI ENTER---------------------------------------------------------------")  # Zastavení, aby si hráč mohl prohlédnout co se stalo, atd.
