@@ -310,47 +310,33 @@ class KonzolovyHrac(Hrac):                                              # Tříd
             print("Tvé možné pohyby jsou: ")
             if self.barva == "Bílý":
                 for pole in hra.herni_pole:
-                    if pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) == 1 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) == 1 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) == 1 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) == 1 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
-                       pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) < 5:
-                        print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_1} | {pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_2}")
-                        if hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 != 0:
-                            print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_3} | {pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_4}")
-                        elif hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 == 0:
-                            print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_3}")
-                        elif hra.kostka.kostka_3 == 0 and hra.kostka.kostka_4 != 0:
-                            print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_4}")
-
+                    if pole.cislo_pole + hra.kostka.kostka_1 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" and hra.kostka.kostka_1 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_1 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) == 1 and hra.kostka.kostka_1 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_1}")
+                    if pole.cislo_pole + hra.kostka.kostka_2 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" and hra.kostka.kostka_2 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_2 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) == 1 and hra.kostka.kostka_2 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_2}")
+                    if pole.cislo_pole + hra.kostka.kostka_3 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" and hra.kostka.kostka_3 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_3 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) == 1 and hra.kostka.kostka_3 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_3}")
+                    if pole.cislo_pole + hra.kostka.kostka_4 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" and hra.kostka.kostka_4 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_4 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) == 1 and hra.kostka.kostka_4 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole + hra.kostka.kostka_4}")
+                       
             if self.barva == "Černý":
                 for pole in hra.herni_pole:
-                    if pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) == 1 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) == 1 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) == 1 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) == 1 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
-                       pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) < 5:
-                        print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_1} | {pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_2}")
-                        if hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 != 0:
-                            print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_3} | {pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_4}")
-                        elif hra.kostka.kostka_3 != 0 and hra.kostka.kostka_4 == 0:
-                            print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_3}")
-                        elif hra.kostka.kostka_3 == 0 and hra.kostka.kostka_4 != 0:
-                            print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_4}")
+                    if pole.cislo_pole - hra.kostka.kostka_1 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" and hra.kostka.kostka_1 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_1 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) == 1 and hra.kostka.kostka_1 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_1}")
+                    if pole.cislo_pole - hra.kostka.kostka_2 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" and hra.kostka.kostka_2 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_2 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) == 1 and hra.kostka.kostka_2 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_2}")
+                    if pole.cislo_pole - hra.kostka.kostka_3 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" and hra.kostka.kostka_3 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_3 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) == 1 and hra.kostka.kostka_3 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_3}")
+                    if pole.cislo_pole - hra.kostka.kostka_4 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" and hra.kostka.kostka_4 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_4 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) == 1 and hra.kostka.kostka_4 != 0:
+                        print(f"{pole.cislo_pole}->{pole.cislo_pole - hra.kostka.kostka_4}")
 
             start = int(input("Zadej číslo pole, odkud vybíráš: "))
             if hra.kostka.kostka_1 != hra.kostka.kostka_2:     
