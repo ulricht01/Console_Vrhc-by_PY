@@ -9,7 +9,7 @@ class HerniDeska:
             print('FILE EXIST!')
         else:
             print('FILE NOT EXIST!')"""
-        
+
         self.token = rand(0,1)                                      # Vytvoření tokenu pro určování, kdo bude začínat
         barevny_seznam = ["Černý", "Bílý"]                          # Seznam barev hráčů 
         random.shuffle(barevny_seznam)                              # Přeházení pořadí (Kvůli random nastavení barvy)
@@ -25,6 +25,10 @@ class HerniDeska:
             self.Hrac1 = KonzolovyHrac(hrac1, barevny_seznam[0])
             hrac2 = input("Jméno Ai 1: ")
             self.Hrac2 = AiHrac(hrac2, barevny_seznam[1])           # Základní nabídka pro tvorbu hry s hráčem/AI hráčem
+
+        self.hraje_se = True  # Hra je ve stavu hraní
+        #self.rezignace_hry_statistiky = {"Bílý": 0, "Černý": 0}
+        #self.rezignace_hry_uzavreno = False
 
         self.kostka = DvojKostka()
         self.barec = Bar()
@@ -96,8 +100,8 @@ class HerniDeska:
         'Cil': self.cilove_pole_bila,
         'Kostka_1': self.kostka.kostka_1,
         'Kostka_2': self.kostka.kostka_2,
-        'Kostka_3': self.kostka.kostka_3,
-        'Kostka_4': self.kostka.kostka_4,
+        'Kostka_3': self.kostka.kostka_3,   #zbytecnost????????
+        'Kostka_4': self.kostka.kostka_4,   #zbytecnost????????
         #'Bar': bar_bila_data,
         }
         data_2 = {
@@ -107,8 +111,8 @@ class HerniDeska:
         'Cil': self.cilove_pole_cerna,
         'Kostka_1': self.kostka.kostka_1,
         'Kostka_2': self.kostka.kostka_2,
-        'Kostka_3': self.kostka.kostka_3,
-        'Kostka_4': self.kostka.kostka_4,
+        'Kostka_3': self.kostka.kostka_3,   #zbytecnost????????
+        'Kostka_4': self.kostka.kostka_4,   #zbytecnost????????
         #'Bar': bar_cerna_data,
         }
 
@@ -134,6 +138,7 @@ class HerniDeska:
             json.dump(data, file)
         print("Hra byla uložena.")
 
+    
     def load_player_data(self, player_data):
         if player_data['PlayerType'] == "KonzolovyHrac":
             return KonzolovyHrac(player_data['Jmeno'], player_data['Barva'])
@@ -152,8 +157,8 @@ class HerniDeska:
 
         self.Hrac1 = self.load_player_data(player1_data)
         self.Hrac2 = self.load_player_data(player2_data)
-        self.barec.pocet_zetonu_bila = player1_data['Score']
-        self.barec.pocet_zetonu_cerna = player2_data['Score']
+        self.barec.pocet_zetonu_bila = player1_data['Cil']
+        self.barec.pocet_zetonu_cerna = player2_data['Cil']
 
         self.kostka.kostka_1 = player1_data['Kostka_1']  # Načteme hodnotu první kostky
         self.kostka.kostka_2 = player1_data['Kostka_2']  # Načteme hodnotu druhé kostky
@@ -168,6 +173,7 @@ class HerniDeska:
             self.herni_pole[i].barva = pole_data['barva']
 
         print("Hra byla nahrána.")
+
 
     def NacistBar(self, bar_data):
         self.barec.zetony_bila = []
@@ -186,6 +192,42 @@ class HerniDeska:
                 kamen = HerniKamen(barva)
                 radek_zetonu.append(kamen)
             self.barec.zetony_cerna.append(radek_zetonu)
+
+    def rezignace_hry(self):
+        if self.hraje_se:
+            print("=============== KONEC HRY ===============")
+            if self.token == 0:  # Pokud hráč 1 hraje, rezignoval hráč 1
+                #print("Rezignoval: ", self.Hrac1.jmeno)
+                if self.Hrac1.barva == "Černý":
+                    print("Vyhrál: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila)
+                    print("Vzdal se: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)   
+                    print("Bar: ", self.cilove_pole_cerna) 
+                elif self.Hrac1.barva == "Bílý":
+                    print("Vyhrál: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)    
+                    print("Vzdal se: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila) 
+                    print("Bar: ", self.cilove_pole_bila)  
+                else:
+                    print("CHYBA")    
+            elif self.token == 1:  # Pokud hráč 2 hraje, rezignoval hráč 2
+                #print("Rezignoval: ", self.Hrac2.jmeno)
+                if self.Hrac2.barva == "Černý":
+                    print("Vyhrál: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila)
+                    print("Vzdal se: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)
+                    print("Bar: ", self.cilove_pole_cerna)    
+                elif self.Hrac2.barva == "Bílý":
+                    print("Vyhrál: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)
+                    print("Vzdal se: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila)
+                    print("Bar: ", self.cilove_pole_bila)  
+                else:
+                    print("CHYBA")
+            print("=========================================")
+            sys.exit() 
+            
+    def statistiky_konec_hry(self):
+        print("Statistiky rezignace hry:")
+        for hrac, pocet_vzdan in self.konec_hry_statistiky.items():
+            print(f"{hrac}: {pocet_vzdan} vzdání")
+    
 
 class HerniPole:                                                    # Třída hracího pole/zásobníku
     def __init__(self, cislo_pole, zasobnik = None):                
@@ -253,17 +295,19 @@ class Bar:                                                          # Třída ba
         cil = hra.herni_pole[x].zasobnik
         cil.append(kamen)
 
-    def vyhod_z_baru(self):                                         # Metoda, která bude sloužit pro odečtení žetonu ze seznamu zetonu z baru
-        if hra.Hrac1.barva == "Bílý" and len(self.zetony_bila) >= 1:
-            x = self.zetony_bila.pop(-1)
-            hra.barec.vytvor_kamen_bily(x)
-        elif hra.Hrac1.barva == "Bílý" and len(self.zetony_bila) == 0:
-            print("Na baru nemáš žádné žetony!")
-        elif hra.Hrac1.barva == "Černý" and len(self.zetony_cerna) >= 1:
-            x = self.zetony_cerna.pop(-1)
-            hra.barec.vytvor_kamen_cerny(x)
-        elif hra.Hrac1.barva == "Černý" and len(self.zetony_cerna) == 0:
-            print(print("Na baru nemáš žádné žetony!"))
+    def vyhod_z_baru(self):                                         
+        if self.barva == "Bílý":
+            if len(self.zetony_bila) >= 1:
+                x = self.zetony_bila.pop(-1)
+                hra.barec.vytvor_kamen_bily(x)
+            else:
+                print("Na baru nemáš žádné žetony!")
+        elif self.barva == "Černý":
+            if len(self.zetony_cerna) >= 1:
+                x = self.zetony_cerna.pop(-1)
+                hra.barec.vytvor_kamen_cerny(x)
+            else:
+                print("Na baru nemáš žádné žetony!")
 
     def pridej_do_baru(self, cil = None):                         # Přidání žetonu na bar
         temp = []
@@ -358,7 +402,11 @@ class Hrac:                                                         # Třída hr
                 print("Stále můžeš táhnout!")
 
 
-class KonzolovyHrac(Hrac):                                              # Třída konzolového hráče
+class KonzolovyHrac(Hrac):              # Třída konzolového hráče
+    def __init__(self, jmeno, barva):
+        super().__init__(jmeno, barva)
+        self.hraje = False  # Přidat inicializaci atributu hraje pro KonzolovyHrac
+
     def tah(self, temp= []):                                            # Metoda pohybu žetonu hráče
         if hra.presuny < 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 and hra.hozeno == 1 or hra.presuny < 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0 and hra.hozeno ==1:
             print("Tvé možné pohyby jsou: ")
@@ -641,7 +689,8 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         print("6) Jedu do cíle")
         print("7) Uložit hru")
         print("8) Nahrát hru")
-        print("9) Ukončit hru")
+        print("9) Vzdát hru")
+        print("10) Ukončit hru")
         akce = int(input("Zadej akci: "))
         if akce == 1 and hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
             if hra.token == 0:                        
@@ -676,6 +725,8 @@ class KonzolovyHrac(Hrac):                                              # Tříd
         elif akce == 8:
             hra.Nahrat()
         elif akce == 9:
+            hra.rezignace_hry()
+        elif akce == 10:
             sys.exit()
             
 
@@ -683,12 +734,14 @@ class KonzolovyHrac(Hrac):                                              # Tříd
             print("Už jsi házel!")
         else:
             print("Neplatná akce!")
-   
-            
+
 class AiHrac(Hrac):                    # Třída AI hráče
     pass
+
 hra = HerniDeska()                  # Vytvoření instance herní desky 
 hra.priprav_hru()                   # Připravení hry                     
+#hra.statistiky_rezignace_hry()
+
 
 while True:                         # Herní cyklus
     hra.vytvor_hraci_plochu()
@@ -699,6 +752,6 @@ while True:                         # Herní cyklus
     elif hra.token == 1:            # To co dělá hráč, zatím pro účely testování, pouze ukončí tah
         print(f"Na tahu je hráč: {hra.Hrac2.jmeno} ({hra.Hrac2.barva})")
         print('------------------------')
-        hra.Hrac2.nabidka() 
+        hra.Hrac2.nabidka()
 
     input("-----------------------------------------------------STISKNI ENTER---------------------------------------------------------------")  # Zastavení, aby si hráč mohl prohlédnout co se stalo, atd.
