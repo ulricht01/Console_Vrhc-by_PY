@@ -395,14 +395,14 @@ class Hrac:                                                         # Třída hr
         if self.barva == "Bílý" and len(hra.barec.zetony_bila) >= 1:
             print("Bílá: ",(len(hra.barec.zetony_bila)))
             if len(hra.barec.zetony_bila) >= 1:
-                x = hra.barec.zetony_bila.pop(-1)
+                x = hra.barec.zetony_bila.pop(-1)[0]
                 hra.barec.vytvor_kamen_bily(x)
             else:
                 print("Na baru nemáš žádné žetony!")
         elif self.barva == "Černý" and len(hra.barec.zetony_cerna) >= 1:
             print(len(hra.barec.zetony_cerna))
             if len(hra.barec.zetony_cerna) >= 1:
-                x = hra.barec.zetony_cerna.pop(-1)
+                x = hra.barec.zetony_cerna.pop(-1)[0]
                 hra.barec.vytvor_kamen_cerny(x)
             else:
                 print("Na baru nemáš žádné žetony!")
