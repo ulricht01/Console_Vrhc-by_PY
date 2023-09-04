@@ -227,6 +227,37 @@ class HerniDeska:
         print("Statistiky rezignace hry:")
         for hrac, pocet_vzdan in self.konec_hry_statistiky.items():
             print(f"{hrac}: {pocet_vzdan} vzdání")
+
+    def vyhodnoceni(self):
+        kontrola_bil = 0
+        kontrola_cer = 0
+        print("====== Statistika ======")
+        hra.Hrac1.vypis_konec()
+        hra.Hrac2.vypis_konec()
+        for i in range(0,5):
+            for zeton in hra.herni_pole[i].zasobnik:
+                if zeton.barva == "Bílý":
+                    kontrola_bil +=1
+        for i in range(18,23):
+            for zeton in hra.herni_pole[i].zasobnik:
+                if zeton.barva == "Černý":
+                    kontrola_cer +=1
+
+        if len(hra.cilove_pole_cerna) == 15 and len(hra.cilove_pole_bila) == 0 and len(hra.barec.zetony_bila) >= 0 or len(hra.cilove_pole_cerna) == 15 and len(hra.cilove_pole_bila) == 0 and kontrola_bil < 15:
+            print("ČERNÁ: BACKGAMMON!")
+        elif len(hra.cilove_pole_bila) == 15 and len(hra.cilove_pole_cerna) == 0 and len(hra.barec.zetony_cerna) >= 0 or len(hra.cilove_pole_bila) == 15 and len(hra.cilove_pole_cerna) == 0 and kontrola_cer < 15:
+            print("BÍLÁ: BACKGAMMON!")
+        elif len(hra.cilove_pole_cerna) == 15 and len(hra.cilove_pole_bila) == 0 and kontrola_bil == 15:
+            print("ČERNÁ: GAMMON!")
+        elif len(hra.cilove_pole_bila) == 15 and len(hra.cilove_pole_cerna) == 0 and kontrola_cer == 15:
+            print("BÍLÁ: GAMMON!")
+        elif len(hra.cilove_pole_cerna) == 15 and len(hra.cilove_pole_bila) > 0:
+            print("ČERNÁ: BĚŽNÁ VÝHRA!")
+        elif len(hra.cilove_pole_bila) == 15 and len(hra.cilove_pole_cerna) > 0:
+            print("BÍLÁ: BĚŽNÁ VÝHRA!")
+        
+        
+         
     
 
 class HerniPole:                                                    # Třída hracího pole/zásobníku
@@ -282,18 +313,76 @@ class Bar:                                                          # Třída ba
         self.zetony_cerna = []                                      # Seznam černých žetonů na baru
         self.pocet_zetonu_bila = len(zetony_bila)                   # Počet bílých žetonů na baru
         self.pocet_zetonu_cerna = len(zetony_cerna)                 # Počet černých žetonů na baru
-    
-    def vytvor_kamen_bily(self, x):                    # Vytovření bílého kamenu na cílový zásobník v případě nahazování z baru
-        kamen = x
-        print("Zadej pole na které chceš vyjet: ")
-        cil = hra.herni_pole[int(input(""))-1].zasobnik
-        cil.append(kamen)
 
-    def vytvor_kamen_cerny(self, x):                  # Vytovření černého kamenu na cílový zásobník v případě nahazování z baru
+    def vyjeti_z_baru(self, x, barva):                    # Vytovření bílého kamenu na cílový zásobník v případě nahazování z baru
+        kostka = 0
         kamen = x
-        print("Zadej pole na které chceš vyjet: ")
-        cil = hra.herni_pole[int(input(""))-1].zasobnik
-        cil.append(kamen)
+        print(f" Kostka 1: {hra.kostka.kostka_1} \n Kostka 2: {hra.kostka.kostka_2} \n Kostka 3: {hra.kostka.kostka_3} \n Kostka 4: {hra.kostka.kostka_4}")
+        inp = int(input("Zadej kterou kostkou chceš vyjet: "))
+        if inp == 1:
+            kostka = hra.kostka.kostka_1
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_1 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1]
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_1 = 0
+                else:
+                    print("Pole je obsazené!")
+        elif inp == 2:
+            kostka = hra.kostka.kostka_2
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_2 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1]
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_2 = 0
+                else:
+                    print("Pole je obsazené!")
+        elif inp == 3:
+            kostka = hra.kostka.kostka_3
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_3 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1]
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_3 = 0
+                else:
+                    print("Pole je obsazené!")
+        elif inp == 4:
+            kostka = hra.kostka.kostka_4
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_4 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1].zasobnik
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_4 = 0
+                else:
+                    print("Pole je obsazené!")
 
     def vytvor_start_bily(self, x, barva = "Bílý"):                 # Vytvoření startovních bílých žetonů
         kamen = HerniKamen(barva)
@@ -391,23 +480,29 @@ class Hrac:                                                         # Třída hr
             else:
                 print("Stále můžeš táhnout!")
 
-    def vyhod_z_baru(self):                                       
-        if self.barva == "Bílý" and len(hra.barec.zetony_bila) >= 1:
-            print("Bílá: ",(len(hra.barec.zetony_bila)))
-            if len(hra.barec.zetony_bila) >= 1:
-                x = hra.barec.zetony_bila.pop(-1)[0]
-                hra.barec.vytvor_kamen_bily(x)
-            else:
-                print("Na baru nemáš žádné žetony!")
-        elif self.barva == "Černý" and len(hra.barec.zetony_cerna) >= 1:
-            print(len(hra.barec.zetony_cerna))
-            if len(hra.barec.zetony_cerna) >= 1:
-                x = hra.barec.zetony_cerna.pop(-1)[0]
-                hra.barec.vytvor_kamen_cerny(x)
-            else:
-                print("Na baru nemáš žádné žetony!")
-        else:
-            print("Na baru nejsou žádné žetony!")
+    def vypis_konec(self):
+        i = 0
+        pocet_ve_hre = 0
+        jmeno = self.jmeno
+        barva = self.barva
+        if self.barva == "Bílý":
+            pocet_na_baru = len(hra.barec.zetony_bila)
+            cilove_pole = len(hra.cilove_pole_bila)
+            for i in range(0, 24):
+                for zeton in hra.herni_pole[i].zasobnik:
+                    if zeton.barva == "Bílý":
+                        pocet_ve_hre += 1
+                        i+=1
+        elif self.barva == "Černý":
+            pocet_na_baru = len(hra.barec.zetony_cerna)
+            cilove_pole = len(hra.cilove_pole_cerna)
+            for i in range(0, 24):
+                for zeton in hra.herni_pole[i].zasobnik:
+                    if zeton.barva == "Černý":
+                        pocet_ve_hre += 1
+                        i+=1
+
+        print(f"{barva} hráč {jmeno}| Žetony na baru: {pocet_na_baru} | Žetony v cíli: {cilove_pole} | Žetony ve hře: {pocet_ve_hre}")
 
 
 class KonzolovyHrac(Hrac):              # Třída konzolového hráče
@@ -692,6 +787,24 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
                 print("Už jsi táhl za obě kostky!")
         else:
             print("Nemáš všechny žetony na posledních polích!")
+    
+
+    def vyhod_z_baru(self):                                       
+        if self.barva == "Bílý" and len(hra.barec.zetony_bila) >= 1:
+            if len(hra.barec.zetony_bila) >= 1:
+                x = hra.barec.zetony_bila.pop(-1)[0]
+                hra.barec.vyjeti_z_baru(x, "Bílý")
+            else:
+                print("Na baru nemáš žádné žetony!")
+        elif self.barva == "Černý" and len(hra.barec.zetony_cerna) >= 1:
+            if len(hra.barec.zetony_cerna) >= 1:
+                x = hra.barec.zetony_cerna.pop(-1)[0]
+                hra.barec.vyjeti_z_baru(x, "Černý")
+            else:
+                print("Na baru nemáš žádné žetony!")
+        else:
+            print("Na baru nejsou žádné žetony!")
+
 
     def nabidka(self):                                  # Nabídka pro hráče a jeho možné akce
         print("1) Hod kostkami!")
@@ -753,6 +866,7 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
         elif akce == 9:
             hra.rezignace_hry()
         elif akce == 10:
+            hra.vyhodnoceni()
             sys.exit()
             
 
