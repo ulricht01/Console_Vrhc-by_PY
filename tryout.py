@@ -255,6 +255,8 @@ class HerniDeska:
             print("ČERNÁ: BĚŽNÁ VÝHRA!")
         elif len(hra.cilove_pole_bila) == 15 and len(hra.cilove_pole_cerna) > 0:
             print("BÍLÁ: BĚŽNÁ VÝHRA!")
+        else:
+            print("Předčasné ukončení!")
         
         
          
@@ -288,18 +290,21 @@ class DvojKostka:                                                   # Třída ko
         self.kostka_4 = 0
 
     def hod_kostkami(self):                                         # Metoda pro hod kostkami
-        self.kostka_1 = rand(1, 6)
-        self.kostka_2 = rand(1, 6)
-        if self.kostka_1 == self.kostka_2:
-            self.kostka_3 = self.kostka_1
-            self.kostka_4 = self.kostka_2
-            hra.hozeno = 1
-            self.double = 2
-            return self.kostka_1, self.kostka_2, self.kostka_3, self.kostka_4
+        if hra.hozeno == 0:
+            self.kostka_1 = rand(1, 6)
+            self.kostka_2 = rand(1, 6)
+            if self.kostka_1 == self.kostka_2:
+                self.kostka_3 = self.kostka_1
+                self.kostka_4 = self.kostka_2
+                hra.hozeno = 1
+                self.double = 2
+                return self.kostka_1, self.kostka_2, self.kostka_3, self.kostka_4
+            else:
+                hra.hozeno = 1
+                self.double = 0
+                return self.kostka_1, self.kostka_2
         else:
-            hra.hozeno = 1
-            self.double = 0
-            return self.kostka_1, self.kostka_2
+            print("Už jsi házel!")
         
     def vynuluj(self):
         self.kostka_1 = 0
@@ -319,6 +324,78 @@ class Bar:                                                          # Třída ba
         kamen = x
         print(f" Kostka 1: {hra.kostka.kostka_1} \n Kostka 2: {hra.kostka.kostka_2} \n Kostka 3: {hra.kostka.kostka_3} \n Kostka 4: {hra.kostka.kostka_4}")
         inp = int(input("Zadej kterou kostkou chceš vyjet: "))
+        if inp == 1:
+            kostka = hra.kostka.kostka_1
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_1 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1]
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_1 = 0
+                else:
+                    print("Pole je obsazené!")
+        elif inp == 2:
+            kostka = hra.kostka.kostka_2
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_2 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1]
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_2 = 0
+                else:
+                    print("Pole je obsazené!")
+        elif inp == 3:
+            kostka = hra.kostka.kostka_3
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_3 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1]
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_3 = 0
+                else:
+                    print("Pole je obsazené!")
+        elif inp == 4:
+            kostka = hra.kostka.kostka_4
+            if barva == "Bílý":
+                cil = hra.herni_pole[kostka-1]
+                if cil.barva == "B" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_4 = 0
+                else:
+                    print("Pole je obsazené!")
+            elif barva == "Černý":
+                cil = hra.herni_pole[23 - kostka -1].zasobnik
+                if cil.barva == "Č" or len(cil.zasobnik) == 0:
+                    cil.zasobnik.append(kamen)
+                    hra.kostka.kostka_4 = 0
+                else:
+                    print("Pole je obsazené!")
+    
+    def vyjeti_z_baru_ai(self, x, barva):                    # Vytovření bílého kamenu na cílový zásobník v případě nahazování z baru
+        kostka = 0
+        kamen = x
+        if hra.kostka.double == 2:
+            inp = rand(1,4)
+        else:
+            inp = rand(1,2)
         if inp == 1:
             kostka = hra.kostka.kostka_1
             if barva == "Bílý":
@@ -504,11 +581,9 @@ class Hrac:                                                         # Třída hr
 
         print(f"{barva} hráč {jmeno}| Žetony na baru: {pocet_na_baru} | Žetony v cíli: {cilove_pole} | Žetony ve hře: {pocet_ve_hre}")
 
-
 class KonzolovyHrac(Hrac):              # Třída konzolového hráče
     def __init__(self, jmeno, barva):
         super().__init__(jmeno, barva)
-        self.hraje = False  # Přidat inicializaci atributu hraje pro KonzolovyHrac
 
     def tah(self, temp= []):                                            # Metoda pohybu žetonu hráče
         if hra.presuny < 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 and hra.hozeno == 1 and hra.kostka.double == 0 or hra.presuny < 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0 and hra.hozeno == 1 and hra.kostka.double == 0 or \
@@ -565,10 +640,8 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
             
             if self.barva == "Černý":
                 vyhazovac = cil - 1
-                print(vyhazovac)
             if self.barva == "Bílý":
                 vyhazovac = cil - 1 
-                print(vyhazovac)
 
             if len(pole_cil.zasobnik) == 5:                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
                 print("Tento zásobník je již plný!")
@@ -639,7 +712,7 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
         vse_akt_zetony_cerna = 15 - len(hra.cilove_pole_cerna)
         vse_akt_zetony_bila = 15 - len(hra.cilove_pole_bila)
         
-        if hra.Hrac1.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or hra.Hrac1.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
+        if self.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or self.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
             if hra.presuny < 2:
                 start = int(input("Zadej číslo pole, odkud vybíráš: "))
                 if hra.kostka.kostka_1 != hra.kostka.kostka_2:     
@@ -690,7 +763,7 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
                 if self.barva == "Černý":
                     pole_cil = hra.cilove_pole_cerna
                 elif self.barva == "Bílý":
-                    pole_cil = hra.cilove_pole_cerna
+                    pole_cil = hra.cilove_pole_bila
 
                 if cil == 0 and self.barva == "Černý" or cil == 25 and self.barva == "Bílý":                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
                     temp =[]
@@ -713,81 +786,8 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
 
             elif hra.presuny == 2:
                 print("Už jsi táhl za obě kostky!")
-        elif hra.Hrac2.barva == "Černý" and kontrola_cerna == vse_akt_zetony_cerna or hra.Hrac2.barva == "Bílý" and kontrola_bila == vse_akt_zetony_bila:
-            if hra.presuny < 2:
-                start = int(input("Zadej číslo pole, odkud vybíráš: "))
-                if hra.kostka.kostka_1 != hra.kostka.kostka_2:     
-                    print("1) O počet na 1. kostce")
-                    print("2) O počet na 2. kostce")
-                elif hra.kostka.kostka_1 == hra.kostka.kostka_2:
-                    print("1) O počet na 1. kostce")
-                    print("2) O počet na 2. kostce")
-                    print("3) O počet na 1. double")
-                    print("4) O počet na 2. double")
-                inp = int(input("Zadej: "))
-                if inp == 1:                                                # Možnost pohybu o první kostku
-                    if self.barva == 'Černý':
-                        cil = start - hra.kostka.kostka_1
-                    else:
-                        cil = start + hra.kostka.kostka_1
-                elif inp == 2:
-                    if self.barva == 'Černý':
-                        cil = start - hra.kostka.kostka_2
-                    else:
-                        cil = start + hra.kostka.kostka_2                               # Možnost pohybu o druhou kostku
-                elif inp == 3 and hra.kostka.kostka_1 == hra.kostka.kostka_2:
-                    if self.barva == 'Černý':
-                        cil = start - hra.kostka.kostka_3
-                    else:
-                        cil = start + hra.kostka.kostka_3                          # Možnost pohybu o součet obou kostek
-                elif inp == 4 and hra.kostka.kostka_1 == hra.kostka.kostka_2:
-                    if self.barva == 'Černý':
-                        cil = start - hra.kostka.kostka_4
-                    else:
-                        cil = start + hra.kostka.kostka_4
-                else:
-                    print("Špatné zadání!")
-                    return
-                
-                
-                if self.barva == 'Černý':
-                    if start > 6 or start < 0 and start != 0:
-                        print("Neplatné číslo pole!")
-                        return
-                else:
-                    if start < 19 or start > 24 and cil != 25:
-                        print("Neplatné číslo pole!")
-                        return
-
-                pole_start = hra.herni_pole[start - 1]
-                if self.barva == "Černý":
-                    pole_cil = hra.cilove_pole_cerna
-                elif self.barva == "Bílý":
-                    pole_cil = hra.cilove_pole_cerna
-
-                if cil == 0 and self.barva == "Černý" or cil == 25 and self.barva == "Bílý":                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
-                    temp =[]
-                    temp.append(pole_start.zasobnik[0])
-                    pole_cil.append(temp[0])
-                    pole_start.zasobnik.remove(pole_start.zasobnik[0])
-                    if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
-                        hra.presuny = hra.presuny + 1
-                        hra.kostka.kostka_1 = 0
-                    elif inp == 2:
-                        hra.presuny = hra.presuny + 1
-                        hra.kostka.kostka_2 = 0
-                    elif inp == 3:
-                        hra.kostka.kostka_3 = 0
-                    elif inp == 4:
-                        hra.kostka.kostka_4 = 0
-                else:
-                    print("Něco se pokazilo")
-
-            elif hra.presuny == 2:
-                print("Už jsi táhl za obě kostky!")
         else:
             print("Nemáš všechny žetony na posledních polích!")
-    
 
     def vyhod_z_baru(self):                                       
         if self.barva == "Bílý" and len(hra.barec.zetony_bila) >= 1:
@@ -875,8 +875,392 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
         else:
             print("Neplatná akce!")
 
-class AiHrac(Hrac):                    # Třída AI hráče
-    pass
+class AiHrac(Hrac):
+    def __init__(self, jmeno, barva):
+        super().__init__(jmeno, barva)
+
+    def tah(self, temp=[]):
+        start = 0
+        start_pol = 0
+        pohyby_start = []
+        if hra.presuny < 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 and hra.hozeno == 1 and hra.kostka.double == 0 or hra.presuny < 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0 and hra.hozeno == 1 and hra.kostka.double == 0 or \
+           hra.presuny <= 2 and self.barva == "Černý" and len(hra.barec.zetony_cerna) == 0 and hra.hozeno == 1 and hra.kostka.double > 0 or hra.presuny <= 2 and self.barva == "Bílý" and len(hra.barec.zetony_bila) == 0 and hra.hozeno == 1 and hra.kostka.double > 0:
+            print("Tvé možné pohyby jsou: ")
+            
+            self.kontrola_pohybu()
+            if self.barva == "Bílý":
+                for pole in hra.herni_pole:
+                    if pole.cislo_pole + hra.kostka.kostka_1 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" and hra.kostka.kostka_1 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_1 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) == 1 and hra.kostka.kostka_1 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+                    elif pole.cislo_pole + hra.kostka.kostka_2 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" and hra.kostka.kostka_2 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_2 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) == 1 and hra.kostka.kostka_2 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+
+                    elif pole.cislo_pole + hra.kostka.kostka_3 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" and hra.kostka.kostka_3 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_3 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) == 1 and hra.kostka.kostka_3 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+
+                    elif pole.cislo_pole + hra.kostka.kostka_4 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" and hra.kostka.kostka_4 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole + hra.kostka.kostka_4 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) == 1 and hra.kostka.kostka_4 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+                        
+            elif self.barva == "Černý":
+                for pole in hra.herni_pole:
+                    if pole.cislo_pole - hra.kostka.kostka_1 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" and hra.kostka.kostka_1 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_1 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) == 1 and hra.kostka.kostka_1 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+                    if pole.cislo_pole - hra.kostka.kostka_2 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" and hra.kostka.kostka_2 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_2 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) == 1 and hra.kostka.kostka_2 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+                    if pole.cislo_pole - hra.kostka.kostka_3 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" and hra.kostka.kostka_3 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_3 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) == 1 and hra.kostka.kostka_3 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+                    if pole.cislo_pole - hra.kostka.kostka_4 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" and hra.kostka.kostka_4 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) < 5 or \
+                       pole.cislo_pole - hra.kostka.kostka_4 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) == 1 and hra.kostka.kostka_4 != 0:
+                        start = pole.cislo_pole
+                        pohyby_start.append(start)
+
+            if hra.kostka.double == 0 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 > 0:
+                inp = rand(1,2)
+            elif hra.kostka.double == 0 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 > 0:
+                inp = 2
+            elif hra.kostka.double == 0 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 == 0:
+                inp = 1
+            elif hra.kostka.double == 2 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 > 0:
+                inp = rand(1,4)
+            elif hra.kostka.double == 2 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 == 0:
+                inp = 1
+            elif hra.kostka.double == 2 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 > 0:
+                inp = rand(2,4)
+            elif hra.kostka.double == 2 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 == 0:
+                inp = rand(3,4)
+            elif hra.kostka.double == 1 and hra.kostka.kostka_3 == 0 and hra.kostka.kostka_4 > 0:
+                inp = 4
+            elif hra.kostka.double == 1 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 > 0:
+                inp = 2
+            elif hra.kostka.double == 1 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 == 0:
+                inp = 1
+            elif hra.kostka.double == 1 and hra.kostka.kostka_3 > 0 and hra.kostka.kostka_4 == 0:
+                inp = 3
+
+            if inp == 1:                                                
+                if self.barva == 'Černý':
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol - hra.kostka.kostka_1
+                    print(cil)
+                else:
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol + hra.kostka.kostka_1
+                    print(cil)
+            elif inp == 2:
+                if self.barva == 'Černý':
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol - hra.kostka.kostka_2
+                    print(cil)
+                else:
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol + hra.kostka.kostka_2
+                    print(cil)                             
+            elif inp == 3 and hra.kostka.kostka_1 == hra.kostka.kostka_2:
+                if self.barva == 'Černý':
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol - hra.kostka.kostka_3
+                    print(cil)
+                else:
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol + hra.kostka.kostka_3
+                    print(cil)                         # Možnost pohybu o součet obou kostek
+            elif inp == 4 and hra.kostka.kostka_1 == hra.kostka.kostka_2:
+                if self.barva == 'Černý':
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol - hra.kostka.kostka_4
+                    print(cil)
+                else:
+                    start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                    cil = start_pol + hra.kostka.kostka_4
+                    print(cil)
+            else:
+                print("Špatné zadání!")
+                return
+
+            start = start_pol
+
+            if self.barva == 'Černý':
+                if start < 1 or start > 24 or cil < 1 or cil > 24 or cil > start:
+                    print("Neplatné číslo pole!")
+                    return
+            else:
+                if start < 1 or start > 24 or cil < 1 or cil > 24 or cil < start:
+                    print("Neplatné číslo pole!")
+                    return
+
+            pole_start = hra.herni_pole[start - 1]
+            pole_cil = hra.herni_pole[cil - 1]
+            
+            if self.barva == "Černý":
+                vyhazovac = cil - 1
+            if self.barva == "Bílý":
+                vyhazovac = cil - 1 
+
+            if len(pole_cil.zasobnik) == 5:                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
+                print("Tento zásobník je již plný!")
+            else:
+                if len(pole_start.zasobnik) > 0:                                # Pokud je prázdný, může se na něj přidat
+                    temp =[]
+                    temp.append(pole_start.zasobnik[0])
+
+                    if pole_start.zasobnik[0].barva != self.barva:              # Ošetření, aby hráč přidával na svoje nebo prázdné pole
+                        print("Na zadaném poli nemáte zetony vaší barvy!")
+                    elif pole_cil.barva != pole_start.barva and pole_cil.barva != "N" and len(pole_cil.zasobnik) !=1:
+                        print("Na poli nejsou tvé žetony!")
+                    elif pole_cil.barva == pole_start.barva or pole_cil.barva == "N" or pole_cil.barva != pole_start.barva and len(pole_cil.zasobnik) == 1:
+                        if pole_cil.barva != pole_start.barva and len(pole_cil.zasobnik) == 1:
+                            hra.barec.pridej_do_baru(vyhazovac)
+                            pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                            pole_cil.zasobnik.append(temp[0])
+                            if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
+                                hra.presuny = hra.presuny + 1
+                                hra.kostka.kostka_1 = 0
+                            elif inp == 2:
+                                hra.presuny = hra.presuny + 1
+                                hra.kostka.kostka_2 = 0
+                            elif inp == 3:
+                                hra.kostka.kostka_3 = 0
+                                hra.kostka.double -= 1
+                            elif inp == 4:
+                                hra.kostka.kostka_4 = 0
+                                hra.kostka.double -= 1
+                        elif pole_cil.barva == pole_start.barva or pole_cil.barva == "N":
+                            pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                            pole_cil.zasobnik.append(temp[0])
+                            if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
+                                hra.presuny = hra.presuny + 1
+                                hra.kostka.kostka_1 = 0
+                            elif inp == 2:
+                                hra.presuny = hra.presuny + 1
+                                hra.kostka.kostka_2 = 0
+                            elif inp == 3:
+                                hra.kostka.kostka_3 = 0
+                                hra.kostka.double -= 1
+                            elif inp == 4:
+                                hra.kostka.kostka_4 = 0
+                                hra.kostka.double -= 1
+
+                else:
+                    print("Pole ze kterého se snažíte brát, je prázdné!")
+        elif hra.presuny == 2:
+            print("Už jsi táhl za obě kostky!")
+        elif hra.hozeno == 0:
+            print("Nejdřív si hoď!")
+        elif self.barva == "Černý" and len(hra.barec.zetony_cerna) > 0 or self.barva == "Bílý" and len(hra.barec.zetony_bila) >0:
+            print("Nejdřív vyjeď z baru!")
+                        
+
+    def vyhod_z_baru(self):                                       
+        if self.barva == "Bílý" and len(hra.barec.zetony_bila) >= 1:
+            if len(hra.barec.zetony_bila) >= 1:
+                x = hra.barec.zetony_bila.pop(-1)[0]
+                hra.barec.vyjeti_z_baru_ai(x, "Bílý")
+            else:
+                pass
+        elif self.barva == "Černý" and len(hra.barec.zetony_cerna) >= 1:
+            if len(hra.barec.zetony_cerna) >= 1:
+                x = hra.barec.zetony_cerna.pop(-1)[0]
+                hra.barec.vyjeti_z_baru_ai(x, "Černý")
+            else:
+                pass
+        else:
+            pass
+
+    def jedu_do_cile(self):
+        start = 0
+        start_pol = 0
+        pohyby_start = []
+        self.kontrola_cerna = 0
+        self.kontrola_bila = 0
+        for i in range(6):
+            for objekt in hra.herni_pole[i].zasobnik:
+                if objekt.barva == "Černý":
+                    self.kontrola_cerna += 1
+
+        for j in range(18,23):
+            for objekt in hra.herni_pole[j].zasobnik:
+                if objekt.barva == "Bílý":
+                    self.kontrola_bila += 1
+
+        vse_akt_zetony_cerna = 15 - len(hra.cilove_pole_cerna)
+        vse_akt_zetony_bila = 15 - len(hra.cilove_pole_bila)
+        
+        if self.barva == "Černý" and self.kontrola_cerna == vse_akt_zetony_cerna or self.barva == "Bílý" and self.kontrola_bila == vse_akt_zetony_bila:
+            if hra.presuny < 2:
+                if self.barva == "Bílý":
+                    for pole in hra.herni_pole:
+                        if pole.cislo_pole + hra.kostka.kostka_1 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva != "Č" and hra.kostka.kostka_1 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole + hra.kostka.kostka_1 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_1 - 1].zasobnik) == 1 and hra.kostka.kostka_1 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+                        elif pole.cislo_pole + hra.kostka.kostka_2 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva != "Č" and hra.kostka.kostka_2 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole + hra.kostka.kostka_2 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_2 - 1].zasobnik) == 1 and hra.kostka.kostka_2 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+
+                        elif pole.cislo_pole + hra.kostka.kostka_3 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva != "Č" and hra.kostka.kostka_3 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole + hra.kostka.kostka_3 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_3 - 1].zasobnik) == 1 and hra.kostka.kostka_3 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+
+                        elif pole.cislo_pole + hra.kostka.kostka_4 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva != "Č" and hra.kostka.kostka_4 != 0 and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole + hra.kostka.kostka_4 <= 24 and pole.barva == "B" and hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].barva == "Č" and len(hra.herni_pole[pole.cislo_pole + hra.kostka.kostka_4 - 1].zasobnik) == 1 and hra.kostka.kostka_4 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+                            
+                elif self.barva == "Černý":
+                    for pole in hra.herni_pole:
+                        if pole.cislo_pole - hra.kostka.kostka_1 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva != "B" and hra.kostka.kostka_1 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole - hra.kostka.kostka_1 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_1 - 1].zasobnik) == 1 and hra.kostka.kostka_1 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+                        if pole.cislo_pole - hra.kostka.kostka_2 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva != "B" and hra.kostka.kostka_2 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole - hra.kostka.kostka_2 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_2 - 1].zasobnik) == 1 and hra.kostka.kostka_2 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+                        if pole.cislo_pole - hra.kostka.kostka_3 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva != "B" and hra.kostka.kostka_3 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole - hra.kostka.kostka_3 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_3 - 1].zasobnik) == 1 and hra.kostka.kostka_3 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+                        if pole.cislo_pole - hra.kostka.kostka_4 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva != "B" and hra.kostka.kostka_4 != 0 and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) < 5 or \
+                        pole.cislo_pole - hra.kostka.kostka_4 >= 1 and pole.barva == "Č" and hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].barva == "B" and len(hra.herni_pole[pole.cislo_pole - hra.kostka.kostka_4 - 1].zasobnik) == 1 and hra.kostka.kostka_4 != 0:
+                            start = pole.cislo_pole
+                            pohyby_start.append(start)
+
+                if hra.kostka.double == 0 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 > 0:
+                    inp = rand(1,2)
+                elif hra.kostka.double == 0 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 > 0:
+                    inp = 2
+                elif hra.kostka.double == 0 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 == 0:
+                    inp = 1
+                elif hra.kostka.double == 2 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 > 0:
+                    inp = rand(1,4)
+                elif hra.kostka.double == 2 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 == 0:
+                    inp = 1
+                elif hra.kostka.double == 2 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 > 0:
+                    inp = rand(2,4)
+                elif hra.kostka.double == 2 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 == 0:
+                    inp = rand(3,4)
+                elif hra.kostka.double == 1 and hra.kostka.kostka_3 == 0 and hra.kostka.kostka_4 > 0:
+                    inp = 4
+                elif hra.kostka.double == 1 and hra.kostka.kostka_1 == 0 and hra.kostka.kostka_2 > 0:
+                    inp = 2
+                elif hra.kostka.double == 1 and hra.kostka.kostka_1 > 0 and hra.kostka.kostka_2 == 0:
+                    inp = 1
+                elif hra.kostka.double == 1 and hra.kostka.kostka_3 > 0 and hra.kostka.kostka_4 == 0:
+                    inp = 3
+
+                if inp == 1:                                                
+                    if self.barva == 'Černý':
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol - hra.kostka.kostka_1
+                        print(cil)
+                    else:
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol + hra.kostka.kostka_1
+                        print(cil)
+                elif inp == 2:
+                    if self.barva == 'Černý':
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol - hra.kostka.kostka_2
+                        print(cil)
+                    else:
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol + hra.kostka.kostka_2
+                        print(cil)                             
+                elif inp == 3 and hra.kostka.kostka_1 == hra.kostka.kostka_2:
+                    if self.barva == 'Černý':
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol - hra.kostka.kostka_3
+                        print(cil)
+                    else:
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol + hra.kostka.kostka_3
+                        print(cil)                         
+                elif inp == 4 and hra.kostka.kostka_1 == hra.kostka.kostka_2:
+                    if self.barva == 'Černý':
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol - hra.kostka.kostka_4
+                        print(cil)
+                    else:
+                        start_pol = pohyby_start[rand(0, len(pohyby_start)-1)]
+                        cil = start_pol + hra.kostka.kostka_4
+                        print(cil)
+                else:
+                    print("Špatné zadání!")
+                    return
+
+                start = start_pol
+
+
+                        
+                if self.barva == 'Černý':
+                    if start > 6 or start < 0 and start != 0:
+                        print("Neplatné číslo pole!")
+                        return
+                else:
+                    if start < 19 or start > 24 and cil != 25:
+                        print("Neplatné číslo pole!")
+                        return
+
+                pole_start = hra.herni_pole[start - 1]
+                if self.barva == "Černý":
+                    pole_cil = hra.cilove_pole_cerna
+                elif self.barva == "Bílý":
+                    pole_cil = hra.cilove_pole_bila
+
+                if cil == 0 and self.barva == "Černý" or cil == 25 and self.barva == "Bílý":                                     # Ošetření, aby zásobník, na který se přidává nebyl plný
+                    temp =[]
+                    temp.append(pole_start.zasobnik[0])
+                    pole_cil.append(temp[0])
+                    pole_start.zasobnik.remove(pole_start.zasobnik[0])
+                    if inp == 1:                                            # Zde se nastavují hodnoty, podle toho co se hráč rozhodne udělat při přesunech žetonu o jednu, druhou nebo součet obou kostek
+                        hra.presuny = hra.presuny + 1
+                        hra.kostka.kostka_1 = 0
+                    elif inp == 2:
+                        hra.presuny = hra.presuny + 1
+                        hra.kostka.kostka_2 = 0
+                    elif inp == 3:
+                        hra.kostka.kostka_3 = 0
+                    elif inp == 4:
+                        hra.kostka.kostka_4 = 0
+                else:
+                    print(cil)
+                    print("Něco se pokazilo")
+
+            elif hra.presuny == 2:
+                print("Už jsi táhl za obě kostky!")
+        else:
+            print("Nemáš všechny žetony na posledních polích!")
+
+    def nabidka(self):
+        if hra.hozeno == 0:
+            hra.kostka.hod_kostkami()
+        self.kontrola_pohybu()
+        if self.barva == "Bílý" and self.kontrola_bila == 15 or self.barva == "Černý" and self.kontrola_cerna == 15:
+            self.jedu_do_cile()
+        if len(hra.barec.zetony_bila) == 0 and self.barva == "Bílý" or len(hra.barec.zetony_cerna) == 0 and self.barva == "Černý":
+            self.tah()
+        elif len(hra.barec.zetony_bila) > 0 and self.barva == "Bílý" or len(hra.barec.zetony_cerna) > 0 and self.barva == "Černý":
+            self.vyhod_z_baru()
+        self.prerus_tah()
+
+        
+
 
 hra = HerniDeska()                  # Vytvoření instance herní desky 
 hra.priprav_hru()                   # Připravení hry                     
@@ -889,7 +1273,7 @@ while True:                         # Herní cyklus
         print(f"Na tahu je hráč: {hra.Hrac1.jmeno} ({hra.Hrac1.barva})")
         print('------------------------')
         hra.Hrac1.nabidka()
-    elif hra.token == 1:            # To co dělá hráč, zatím pro účely testování, pouze ukončí tah
+    elif hra.token == 1:          
         print(f"Na tahu je hráč: {hra.Hrac2.jmeno} ({hra.Hrac2.barva})")
         print('------------------------')
         hra.Hrac2.nabidka()
