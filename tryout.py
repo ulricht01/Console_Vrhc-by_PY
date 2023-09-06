@@ -878,6 +878,8 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
 class AiHrac(Hrac):
     def __init__(self, jmeno, barva):
         super().__init__(jmeno, barva)
+        self.kontrola_bila = 0
+        self.kontrola_cerna = 0
 
     def tah(self, temp=[]):
         start = 0
