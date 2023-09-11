@@ -5,12 +5,9 @@ class HerniDeska:
     def __init__(self):
         self.file_path = './file.json'
         check_file = os.path.isfile(self.file_path)
-        """if(check_file):
-            print('FILE EXIST!')
-        else:
-            print('FILE NOT EXIST!')"""
-
         self.token = rand(0,1)                                      # Vytvoření tokenu pro určování, kdo bude začínat
+        self.status = True
+        self.hraje_se = True
         barevny_seznam = ["Černý", "Bílý"]                          # Seznam barev hráčů 
         random.shuffle(barevny_seznam)                              # Přeházení pořadí (Kvůli random nastavení barvy)
 
@@ -26,10 +23,6 @@ class HerniDeska:
             hrac2 = input("Jméno Ai 1: ")
             self.Hrac2 = AiHrac(hrac2, barevny_seznam[1])           # Základní nabídka pro tvorbu hry s hráčem/AI hráčem
 
-        self.hraje_se = True  # Hra je ve stavu hraní
-        #self.rezignace_hry_statistiky = {"Bílý": 0, "Černý": 0}
-        #self.rezignace_hry_uzavreno = False
-
         self.kostka = DvojKostka()
         self.barec = Bar()
         self.hozeno = 0                                             # Určuje jestli v kole již hráč hodil nebo ne, v případě, že hodil, nastaví se 1
@@ -40,10 +33,13 @@ class HerniDeska:
         self.herni_pole = []                                        # Vytvoření seznamzu herního pole
         for cislo in range(1, 25):
             self.herni_pole.append(HerniPole(cislo))                # Přidání polí pro hrací plochu
-        
+    
     def vypis_hrace(self):
         print(self.Hrac1.jmeno, ' je ', self.Hrac1.barva)                      # Vypsání barev hráčů
         print(self.Hrac2.jmeno, ' je ', self.Hrac2.barva)
+
+    def ukonci_hru(self):
+        self.status = False
     
     def vytvor_hraci_plochu(self):
         if self.Hrac1.barva == "Bílý":                              # Výpis pole na hrací ploše pro určení, kolik má hráč žetonů na baru
@@ -197,31 +193,29 @@ class HerniDeska:
         if self.hraje_se:
             print("=============== KONEC HRY ===============")
             if self.token == 0:  # Pokud hráč 1 hraje, rezignoval hráč 1
-                #print("Rezignoval: ", self.Hrac1.jmeno)
                 if self.Hrac1.barva == "Černý":
-                    print("Vyhrál: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila)
-                    print("Vzdal se: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)   
-                    print("Bar: ", self.cilove_pole_cerna) 
+                    print(f"Vyhrál: {self.Hrac2.jmeno} ({self.Hrac2.barva}), Žetony na baru: {len(hra.barec.zetony_bila)}, Žetony v cíli: {len(self.cilove_pole_bila)}")
+                    print(f"Vzdal se: {self.Hrac1.jmeno} ({self.Hrac1.barva}), Žetony na baru: {len(hra.barec.zetony_cerna)}, Žetony v cíli: {len(self.cilove_pole_cerna)}")  
+                    print(f"Bar: Černá: {len(self.cilove_pole_cerna)}, Bílá: {len(self.cilove_pole_cerna)}") 
                 elif self.Hrac1.barva == "Bílý":
-                    print("Vyhrál: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)    
-                    print("Vzdal se: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila) 
-                    print("Bar: ", self.cilove_pole_bila)  
+                    print(f"Vyhrál: {self.Hrac2.jmeno} ({self.Hrac2.barva}), Žetony na baru: {len(hra.barec.zetony_cerna)}, Žetony v cíli: {len(self.cilove_pole_cerna)}")  
+                    print(f"Vzdal se: {self.Hrac1.jmeno} ({self.Hrac1.barva}), Žetony na baru: {len(hra.barec.zetony_bila)}, Žetony v cíli: {len(self.cilove_pole_bila)}")
+                    print(f"Bar: Černá: {len(self.cilove_pole_cerna)}, Bílá: {len(self.cilove_pole_cerna)}")  
                 else:
                     print("CHYBA")    
             elif self.token == 1:  # Pokud hráč 2 hraje, rezignoval hráč 2
-                #print("Rezignoval: ", self.Hrac2.jmeno)
                 if self.Hrac2.barva == "Černý":
-                    print("Vyhrál: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila)
-                    print("Vzdal se: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)
-                    print("Bar: ", self.cilove_pole_cerna)    
+                    print(f"Vyhrál: {self.Hrac1.jmeno} ({self.Hrac1.barva}), Žetony na baru: {len(hra.barec.zetony_bila)}, Žetony v cíli: {len(self.cilove_pole_bila)}")
+                    print(f"Vzdal se: {self.Hrac2.jmeno} ({self.Hrac2.barva}), Žetony na baru: {len(hra.barec.zetony_cerna)}, Žetony v cíli: {len(self.cilove_pole_cerna)}") 
+                    print(f"Bar: Černá: {len(self.cilove_pole_cerna)}, Bílá: {len(self.cilove_pole_cerna)}")      
                 elif self.Hrac2.barva == "Bílý":
-                    print("Vyhrál: ", self.Hrac1.jmeno,"(", self.Hrac1.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_cerna, " Žetony v cíli: ", self.cilove_pole_cerna)
-                    print("Vzdal se: ", self.Hrac2.jmeno,"(", self.Hrac2.barva, ") Žetony na baru: ", self.barec.pocet_zetonu_bila, " Žetony v cíli: ", self.cilove_pole_bila)
-                    print("Bar: ", self.cilove_pole_bila)  
+                    print(f"Vyhrál: {self.Hrac1.jmeno}, ({self.Hrac1.barva}), Žetony na baru: {len(hra.barec.zetony_cerna)}, Žetony v cíli: {len(self.cilove_pole_cerna)}")
+                    print(f"Vzdal se: {self.Hrac2.jmeno} ({self.Hrac2.barva}), Žetony na baru: {len(hra.barec.zetony_bila)}, Žetony v cíli: {len(self.cilove_pole_bila)}")
+                    print(f"Bar: Černá: {len(self.cilove_pole_cerna)}, Bílá: {len(self.cilove_pole_cerna)}")    
                 else:
                     print("CHYBA")
             print("=========================================")
-            sys.exit() 
+            self.ukonci_hru()
             
     def statistiky_konec_hry(self):
         print("Statistiky rezignace hry:")
@@ -257,6 +251,7 @@ class HerniDeska:
             print("BÍLÁ: BĚŽNÁ VÝHRA!")
         else:
             print("Předčasné ukončení!")
+        hra.ukonci_hru()
         
         
          
@@ -807,73 +802,74 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
 
 
     def nabidka(self):                                  # Nabídka pro hráče a jeho možné akce
-        print("1) Hod kostkami!")
-        print("2) Pohni s kameny!")
-        print("3) Zobraz plochu!")
-        print("4) Ukonči tah!")
-        print("5) Vyjed z baru!")
-        print("6) Jedu do cíle")
-        print("7) Uložit hru")
-        print("8) Nahrát hru")
-        print("9) Vzdát hru")
-        print("10) Ukončit hru")
-        akce = int(input("Zadej akci: "))
-        if akce == 1 and hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
-            if hra.token == 0:                        
-                hra.kostka.hod_kostkami()
-                hra.vytvor_hraci_plochu()
-                self.kontrola_pohybu()
-                if hra.Hrac1.valid_moves == 0 and hra.token == 0:
-                    hra.token = 1
-                    hra.kostka.vynuluj()
-                else:
-                    hra.hozeno = 1
-            else:                                       
-                hra.kostka.hod_kostkami()
-                hra.vytvor_hraci_plochu()
-                self.kontrola_pohybu()
-                if hra.Hrac2.valid_moves == 0 and hra.token == 1:
-                    hra.token = 0
-                    hra.kostka.vynuluj()
-                else:
-                    hra.hozeno = 1
-        elif akce == 2:
-            if hra.token == 0:
-                hra.Hrac1.tah()
-            else:
-                hra.Hrac2.tah()
-        elif akce == 3:
-            hra.vytvor_hraci_plochu()
-        elif akce == 4:
-            if hra.token == 0:
-                hra.Hrac1.prerus_tah()
-            else:
-                hra.Hrac2.prerus_tah()
-        elif akce == 5:
-            if hra.token == 0:
-                hra.Hrac1.vyhod_z_baru()
-            elif hra.token == 1:
-                hra.Hrac2.vyhod_z_baru()
-        elif akce == 6:
-            if hra.token == 0:
-                hra.Hrac1.jedu_do_cile()
-            else:
-                hra.Hrac2.jedu_do_cile()
-        elif akce == 7:
-            hra.Ulozit()
-        elif akce == 8:
-            hra.Nahrat()
-        elif akce == 9:
-            hra.rezignace_hry()
-        elif akce == 10:
-            hra.vyhodnoceni()
-            sys.exit()
+            print("1) Hod kostkami!")
+            print("2) Pohni s kameny!")
+            print("3) Zobraz plochu!")
+            print("4) Ukonči tah!")
+            print("5) Vyjed z baru!")
+            print("6) Jedu do cíle")
+            print("7) Vzdát hru")
+            print("8) Ostatní možnosti")
             
-
-        elif hra.hozeno == 1:
-            print("Už jsi házel!")
-        else:
-            print("Neplatná akce!")
+            akce = int(input("Zadej akci: "))
+            if akce == 1 and hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
+                if hra.token == 0:                        
+                    hra.kostka.hod_kostkami()
+                    hra.vytvor_hraci_plochu()
+                    self.kontrola_pohybu()
+                    if hra.Hrac1.valid_moves == 0 and hra.token == 0:
+                        hra.token = 1
+                        hra.kostka.vynuluj()
+                    else:
+                        hra.hozeno = 1
+                else:                                       
+                    hra.kostka.hod_kostkami()
+                    hra.vytvor_hraci_plochu()
+                    self.kontrola_pohybu()
+                    if hra.Hrac2.valid_moves == 0 and hra.token == 1:
+                        hra.token = 0
+                        hra.kostka.vynuluj()
+                    else:
+                        hra.hozeno = 1
+            elif akce == 2:
+                if hra.token == 0:
+                    hra.Hrac1.tah()
+                else:
+                    hra.Hrac2.tah()
+            elif akce == 3:
+                hra.vytvor_hraci_plochu()
+            elif akce == 4:
+                if hra.token == 0:
+                    hra.Hrac1.prerus_tah()
+                else:
+                    hra.Hrac2.prerus_tah()
+            elif akce == 5:
+                if hra.token == 0:
+                    hra.Hrac1.vyhod_z_baru()
+                elif hra.token == 1:
+                    hra.Hrac2.vyhod_z_baru()
+            elif akce == 6:
+                if hra.token == 0:
+                    hra.Hrac1.jedu_do_cile()
+                else:
+                    hra.Hrac2.jedu_do_cile()
+            elif akce == 7:
+                hra.rezignace_hry()
+            elif akce == 8:
+                print("1) Uložit hru")
+                print("2) Nahrát hru")
+                print("3) Ukončí hru")
+                akce_2 = int(input("Zadej svou akci:"))
+                if akce_2 == 1:
+                    hra.Ulozit()
+                elif akce_2 == 2:
+                    hra.Nahrat()
+                elif akce_2 == 3:
+                    hra.vyhodnoceni()
+            elif hra.hozeno == 1 and akce ==1:
+                print("Už jsi házel!")
+            else:
+                print("Neplatná akce!")
 
 class AiHrac(Hrac):
     def __init__(self, jmeno, barva):
@@ -1055,7 +1051,6 @@ class AiHrac(Hrac):
                             elif inp == 4:
                                 hra.kostka.kostka_4 = 0
                                 hra.kostka.double -= 1
-
                 else:
                     print("Pole ze kterého se snažíte brát, je prázdné!")
         elif hra.presuny == 2:
@@ -1269,7 +1264,7 @@ hra.priprav_hru()                   # Připravení hry
 #hra.statistiky_rezignace_hry()
 
 
-while True:                         # Herní cyklus
+while hra.status == True:                         # Herní cyklus
     hra.vytvor_hraci_plochu()
     if hra.token == 0:              # Podmínka, která kontroluje, kdo je na řadě
         print(f"Na tahu je hráč: {hra.Hrac1.jmeno} ({hra.Hrac1.barva})")
