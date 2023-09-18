@@ -7,7 +7,7 @@ rand = random.randint
 
 class KonzolovyHrac(Hrac):              # Třída konzolového hráče
     def __init__(self, jmeno, barva, hra):
-        super().__init__(jmeno, barva,hra)
+        super().__init__(jmeno, barva, hra)
 
     def tah(self, temp= []):                                            # Metoda pohybu žetonu hráče
         if self.hra.presuny < 2 and self.barva == "Černý" and len(self.hra.barec.zetony_cerna) == 0 and self.hra.hozeno == 1 and self.hra.kostka.double == 0 or self.hra.presuny < 2 and self.barva == "Bílý" and len(self.hra.barec.zetony_bila) == 0 and self.hra.hozeno == 1 and self.hra.kostka.double == 0 or \
@@ -231,74 +231,74 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
 
 
     def nabidka(self):                                  # Nabídka pro hráče a jeho možné akce
-                print("1) Hod kostkami!")
-                print("2) Pohni s kameny!")
-                print("3) Zobraz plochu!")
-                print("4) Ukonči tah!")
-                print("5) Vyjed z baru!")
-                print("6) Jedu do cíle")
-                print("7) Vzdát hru")
-                print("8) Ostatní možnosti")
-            
-            #try:
-                akce = int(input("Zadej akci: "))
-                if akce == 1 and self.hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
-                    if self.hra.token == 0:                        
-                        self.hra.kostka.hod_kostkami()
-                        self.hra.vytvor_hraci_plochu()
-                        self.kontrola_pohybu()
-                        if self.hra.Hrac1.valid_moves == 0 and self.hra.token == 0:
-                            self.hra.token = 1
-                            self.hra.kostka.vynuluj()
-                        else:
-                            self.hra.hozeno = 1
-                    else:                                       
-                        self.hra.kostka.hod_kostkami()
-                        self.hra.vytvor_hraci_plochu()
-                        self.kontrola_pohybu()
-                        if self.hra.Hrac2.valid_moves == 0 and self.hra.token == 1:
-                            self.hra.token = 0
-                            self.hra.kostka.vynuluj()
-                        else:
-                            self.hra.hozeno = 1
-                elif akce == 2:
-                    if self.hra.token == 0:
-                        self.hra.Hrac1.tah()
-                    else:
-                        self.hra.Hrac2.tah()
-                elif akce == 3:
+        print("1) Hod kostkami!")
+        print("2) Pohni s kameny!")
+        print("3) Zobraz plochu!")
+        print("4) Ukonči tah!")
+        print("5) Vyjed z baru!")
+        print("6) Jedu do cíle")
+        print("7) Vzdát hru")
+        print("8) Ostatní možnosti")
+        
+        try:
+            akce = int(input("Zadej akci: "))
+            if akce == 1 and self.hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
+                if self.hra.token == 0:                        
+                    self.hra.kostka.hod_kostkami()
                     self.hra.vytvor_hraci_plochu()
-                elif akce == 4:
-                    if self.hra.token == 0:
-                        self.hra.Hrac1.prerus_tah()
+                    self.kontrola_pohybu()
+                    if self.hra.Hrac1.valid_moves == 0 and self.hra.token == 0:
+                        self.hra.token = 1
+                        self.hra.kostka.vynuluj()
                     else:
-                        self.hra.Hrac2.prerus_tah()
-                elif akce == 5:
-                    if self.hra.token == 0:
-                        self.hra.Hrac1.vyhod_z_baru()
-                    elif self.hra.token == 1:
-                        self.hra.Hrac2.vyhod_z_baru()
-                elif akce == 6:
-                    if self.hra.token == 0:
-                        self.hra.Hrac1.jedu_do_cile()
+                        self.hra.hozeno = 1
+                else:                                       
+                    self.hra.kostka.hod_kostkami()
+                    self.hra.vytvor_hraci_plochu()
+                    self.kontrola_pohybu()
+                    if self.hra.Hrac2.valid_moves == 0 and self.hra.token == 1:
+                        self.hra.token = 0
+                        self.hra.kostka.vynuluj()
                     else:
-                        self.hra.Hrac2.jedu_do_cile()
-                elif akce == 7:
-                    self.hra.rezignace_hry()
-                elif akce == 8:
-                    print("1) Uložit hru")
-                    print("2) Nahrát hru")
-                    print("3) Ukončí hru")
-                    akce_2 = int(input("Zadej svou akci:"))
-                    if akce_2 == 1:
-                        self.hra.Ulozit()
-                    elif akce_2 == 2:
-                        self.hra.Nahrat()
-                    elif akce_2 == 3:
-                        self.hra.vyhodnoceni()
-                elif self.hra.hozeno == 1 and akce ==1:
-                    print("Už jsi házel!")
+                        self.hra.hozeno = 1
+            elif akce == 2:
+                if self.hra.token == 0:
+                    self.hra.Hrac1.tah()
                 else:
-                    print("Neplatná akce!")
-            #except:
-                #print("Neplatná akce")
+                    self.hra.Hrac2.tah()
+            elif akce == 3:
+                self.hra.vytvor_hraci_plochu()
+            elif akce == 4:
+                if self.hra.token == 0:
+                    self.hra.Hrac1.prerus_tah()
+                else:
+                    self.hra.Hrac2.prerus_tah()
+            elif akce == 5:
+                if self.hra.token == 0:
+                    self.hra.Hrac1.vyhod_z_baru()
+                elif self.hra.token == 1:
+                    self.hra.Hrac2.vyhod_z_baru()
+            elif akce == 6:
+                if self.hra.token == 0:
+                    self.hra.Hrac1.jedu_do_cile()
+                else:
+                    self.hra.Hrac2.jedu_do_cile()
+            elif akce == 7:
+                self.hra.rezignace_hry()
+            elif akce == 8:
+                print("1) Uložit hru")
+                print("2) Nahrát hru")
+                print("3) Ukončí hru")
+                akce_2 = int(input("Zadej svou akci:"))
+                if akce_2 == 1:
+                    self.hra.Ulozit()
+                elif akce_2 == 2:
+                    self.hra.Nahrat()
+                elif akce_2 == 3:
+                    self.hra.vyhodnoceni()
+            elif self.hra.hozeno == 1 and akce ==1:
+                print("Už jsi házel!")
+            else:
+                print("Neplatná akce!")
+        except:
+            print("Neplatná akce")

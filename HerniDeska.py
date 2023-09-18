@@ -103,8 +103,8 @@ class HerniDeska:
         'Cil': self.cilove_pole_bila,
         'Kostka_1': self.kostka.kostka_1,
         'Kostka_2': self.kostka.kostka_2,
-        'Kostka_3': self.kostka.kostka_3,   #zbytecnost????????
-        'Kostka_4': self.kostka.kostka_4,   #zbytecnost????????
+        'Kostka_3': self.kostka.kostka_3,   
+        'Kostka_4': self.kostka.kostka_4,   
         #'Bar': bar_bila_data,
         }
         data_2 = {
@@ -114,8 +114,8 @@ class HerniDeska:
         'Cil': self.cilove_pole_cerna,
         'Kostka_1': self.kostka.kostka_1,
         'Kostka_2': self.kostka.kostka_2,
-        'Kostka_3': self.kostka.kostka_3,   #zbytecnost????????
-        'Kostka_4': self.kostka.kostka_4,   #zbytecnost????????
+        'Kostka_3': self.kostka.kostka_3,   
+        'Kostka_4': self.kostka.kostka_4,   
         #'Bar': bar_cerna_data,
         }
 
@@ -138,7 +138,7 @@ class HerniDeska:
         }
                 
         with open(self.file_path, 'w') as file:
-            json.dump(data, file)
+            json.dump(data, file, indent=4)
         print("Hra byla uložena.")
 
     
