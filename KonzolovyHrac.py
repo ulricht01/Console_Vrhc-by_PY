@@ -231,16 +231,16 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
 
 
     def nabidka(self):                                  # Nabídka pro hráče a jeho možné akce
-            print("1) Hod kostkami!")
-            print("2) Pohni s kameny!")
-            print("3) Zobraz plochu!")
-            print("4) Ukonči tah!")
-            print("5) Vyjed z baru!")
-            print("6) Jedu do cíle")
-            print("7) Vzdát hru")
-            print("8) Ostatní možnosti")
+                print("1) Hod kostkami!")
+                print("2) Pohni s kameny!")
+                print("3) Zobraz plochu!")
+                print("4) Ukonči tah!")
+                print("5) Vyjed z baru!")
+                print("6) Jedu do cíle")
+                print("7) Vzdát hru")
+                print("8) Ostatní možnosti")
             
-            try:
+            #try:
                 akce = int(input("Zadej akci: "))
                 if akce == 1 and self.hra.hozeno == 0:               # Zjišťování, jakou hráč zvolil akci á různé podmínky ohledně toho jestli házel, přesouval se, apod.
                     if self.hra.token == 0:                        
@@ -300,5 +300,5 @@ class KonzolovyHrac(Hrac):              # Třída konzolového hráče
                     print("Už jsi házel!")
                 else:
                     print("Neplatná akce!")
-            except:
-                print("Neplatná akce")
+            #except:
+                #print("Neplatná akce")

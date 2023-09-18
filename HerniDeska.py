@@ -144,9 +144,9 @@ class HerniDeska:
     
     def load_player_data(self, player_data):
         if player_data['PlayerType'] == "KonzolovyHrac":
-            return KonzolovyHrac(player_data['Jmeno'], player_data['Barva'])
+            return KonzolovyHrac(player_data['Jmeno'], player_data['Barva'], self)
         elif player_data['PlayerType'] == "AiHrac":
-            return AiHrac(player_data['Jmeno'], player_data['Barva'])
+            return AiHrac(player_data['Jmeno'], player_data['Barva'], self)
         else:
             return None
 
